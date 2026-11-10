@@ -1,0 +1,929 @@
+<title>Geo-Begriffstrainer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: Atlas-Arbeitsheft – Kopf mit Höhenlinien, eine Spalte Lernkarten, Reiterleiste unten */
+:root{
+  --paper:#ECF1EE; --surface:#FFFFFF; --surface2:#F4F7F5; --ink:#13222A; --muted:#566A70; --line:#C9D4D0;
+  --petrol:#0E676C; --on-petrol:#FFFFFF; --petrol-soft:#D4E8E5;
+  --ochre:#B4621A; --ochre-soft:#F5E2CD;
+  --ok:#22704A; --ok-soft:#D7EDDF; --bad:#AE3434; --bad-soft:#F5DADA;
+  --c-k:#2C76A8; --c-e:#B4621A; --c-w:#6E52A8; --c-s:#A8435F; --c-b:#957610; --c-n:#378746; --c-g:#5E7075;
+  --f-d:"Avenir Next","Segoe UI Variable Display","Segoe UI",Roboto, ui-sans-serif, system-ui, sans-serif;
+  --f-b:"Segoe UI",Roboto,"Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+  --f-m:ui-monospace,"SF Mono",Consolas, Menlo, monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#0E1619; --surface:#16232A; --surface2:#1B2B32; --ink:#E2EBE9; --muted:#93A8AC; --line:#2B3E45;
+  --petrol:#55B5B2; --on-petrol:#06282A; --petrol-soft:#173A3C;
+  --ochre:#E39A50; --ochre-soft:#3A2A19;
+  --ok:#5EBB84; --ok-soft:#173826; --bad:#E57070; --bad-soft:#3E1D1F;
+  --c-k:#6AAEDB; --c-e:#E39A50; --c-w:#A68BDB; --c-s:#DB7C98; --c-b:#D2B347; --c-n:#6CC07A; --c-g:#93A8AC;
+  color-scheme: dark; } }
+:root[data-theme="dark"]{
+  --paper:#0E1619; --surface:#16232A; --surface2:#1B2B32; --ink:#E2EBE9; --muted:#93A8AC; --line:#2B3E45;
+  --petrol:#55B5B2; --on-petrol:#06282A; --petrol-soft:#173A3C;
+  --ochre:#E39A50; --ochre-soft:#3A2A19;
+  --ok:#5EBB84; --ok-soft:#173826; --bad:#E57070; --bad-soft:#3E1D1F;
+  --c-k:#6AAEDB; --c-e:#E39A50; --c-w:#A68BDB; --c-s:#DB7C98; --c-b:#D2B347; --c-n:#6CC07A; --c-g:#93A8AC;
+  color-scheme: dark; }
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:400 17px/1.5 var(--f-b);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--petrol)}
+button{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-d);text-wrap:balance;margin:0;line-height:1.15}
+.mono{font-family:var(--f-m);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+:focus-visible{outline:3px solid var(--ochre);outline-offset:2px}
+
+/* Kopf */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--petrol);color:var(--on-petrol);overflow:hidden}
+.top-in{position:relative;max-width:760px;margin:0 auto;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;align-items:baseline;gap:12px;justify-content:space-between}
+.top svg.contour{position:absolute;inset:0;width:100%;height:100%;opacity:.16;pointer-events:none}
+.brand{font-family:var(--f-d);font-weight:800;font-size:20px;letter-spacing:-.01em;position:relative;white-space:nowrap}
+@media (max-width:420px){ .top .mono{display:none} }
+.top .mono{position:relative;opacity:.85}
+
+/* Rahmen */
+.wrap{max-width:760px;margin:0 auto;padding-block:16px 120px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:16px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin;margin:0 -4px;padding-inline:4px}
+.chip{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.chip .dot{width:9px;height:9px;border-radius:50%}
+.chip[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.muted{color:var(--muted)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.spread{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:700;cursor:pointer;background:var(--petrol);color:var(--on-petrol);min-height:46px}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.warn{background:var(--bad);color:var(--surface)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.small{padding:8px 12px;min-height:38px;font-size:15px}
+.grow{flex:1 1 0}
+
+/* Start */
+.hero h1{font-size:clamp(30px,7vw,44px);font-weight:800;letter-spacing:-.02em}
+.hero p{margin:6px 0 0;color:var(--muted)}
+.stat{display:flex;align-items:baseline;gap:8px;font-family:var(--f-d);font-weight:800}
+.stat b{font-size:48px;line-height:1;color:var(--petrol)}
+.stat span{font-size:20px;color:var(--muted)}
+.stack{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--surface2);border:1px solid var(--line);margin-top:12px}
+.stack i{display:block;height:100%}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;font-size:14px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.topic-list{display:grid;gap:2px}
+.topic{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);background:none;border-left:0;border-right:0;border-top:0;text-align:left;cursor:pointer;width:100%}
+.topic:last-child{border-bottom:0}
+.topic .nm{display:flex;align-items:center;gap:8px;font-weight:600;min-width:0}
+.topic .ct{font-family:var(--f-m);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{grid-column:1/-1;height:6px;border-radius:3px;background:var(--surface2);overflow:hidden}
+.bar i{display:block;height:100%}
+.modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.mode{display:grid;gap:4px;padding:16px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line);text-decoration:none;color:inherit;min-width:0}
+.mode b{font-family:var(--f-d);font-size:19px}
+.mode small{color:var(--muted);font-size:14px;line-height:1.35}
+.mode:hover{border-color:var(--petrol)}
+.note{font-size:14px;color:var(--muted)}
+.linkbtn{background:none;border:0;padding:0;color:var(--bad);text-decoration:underline;cursor:pointer;font-size:14px}
+
+/* Karteikarten */
+.flash{display:grid;align-content:center;gap:12px;width:100%;min-height:300px;padding:26px 22px;border-radius:18px;background:var(--surface);border:1px solid var(--line);box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(0,0,0,.35);text-align:left;cursor:pointer}
+.flash .meta{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;color:var(--muted)}
+.flash .term{font-family:var(--f-d);font-weight:800;font-size:clamp(26px,6.5vw,36px);letter-spacing:-.01em;overflow-wrap:anywhere}
+.flash .def{font-size:18px}
+.flash .ex{font-size:16px;color:var(--muted);border-left:3px solid var(--ochre);padding-left:10px}
+.flash .hint{font-size:14px;color:var(--muted)}
+.flash.back{background:var(--surface2)}
+.progress{height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--petrol)}
+.dirseg{display:grid;grid-template-columns:1fr 1fr;width:100%}
+.dirseg button{padding:8px 10px;font-size:15px}
+.answer-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn.no{background:var(--bad-soft);color:var(--bad);border:1.5px solid var(--bad)}
+.btn.yes{background:var(--ok-soft);color:var(--ok);border:1.5px solid var(--ok)}
+.boxes{display:flex;gap:4px}
+.boxes i{width:16px;height:6px;border-radius:2px;background:var(--line)}
+.boxes i.on{background:var(--petrol)}
+
+/* Zuordnen */
+.pool{display:flex;flex-wrap:wrap;gap:8px}
+.tchip{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;text-align:left}
+.tchip[aria-pressed="true"],.dcard[aria-pressed="true"]{border-color:var(--petrol);background:var(--petrol-soft)}
+.tchip.done{visibility:hidden}
+.dlist{display:grid;gap:8px}
+.dcard{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px;cursor:pointer;font-size:16px}
+.dcard.done{background:var(--ok-soft);border-color:var(--ok);cursor:default}
+.dcard.done b{display:block;color:var(--ok);font-family:var(--f-d);margin-bottom:2px}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.clock{font-family:var(--f-m);font-variant-numeric:tabular-nums;font-size:15px}
+
+/* Test */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px;cursor:pointer;font-size:16px}
+.opt .k{font-family:var(--f-m);font-size:13px;color:var(--muted);padding-top:2px;flex:0 0 auto}
+.opt[aria-pressed="true"]{border-color:var(--petrol);background:var(--petrol-soft)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default;color:var(--ink)}
+.qtext{font-size:19px;font-weight:600}
+.qtext.big{font-family:var(--f-d);font-size:28px;font-weight:800}
+.input{width:100%;font:inherit;font-size:18px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.fb{border-radius:12px;padding:14px 16px;display:grid;gap:6px}
+.fb.ok{background:var(--ok-soft);border:1.5px solid var(--ok)}
+.fb.no{background:var(--bad-soft);border:1.5px solid var(--bad)}
+.fb strong{font-family:var(--f-d)}
+.seg{display:inline-flex;max-width:100%;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;flex-wrap:wrap}
+.seg button{border:0;background:var(--surface);padding:10px 16px;font-weight:600;cursor:pointer;min-height:44px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.result{border:2px solid var(--ink);border-radius:18px;padding:20px;background:var(--surface);display:grid;gap:14px}
+.result .score{display:flex;gap:18px;align-items:flex-end;flex-wrap:wrap}
+.result .score b{font-family:var(--f-d);font-size:56px;line-height:1;color:var(--petrol);font-variant-numeric:tabular-nums}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:15px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-weight:600}
+.wronglist{margin:0;padding-left:18px;font-size:15px}
+
+/* Anwenden */
+.case h2{font-size:26px}
+.case .place{color:var(--ochre)}
+.figure{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:10px;overflow-x:auto}
+.figure svg{display:block;width:100%;max-width:440px;height:auto;margin:0 auto}
+.sv-axis{stroke:var(--line);stroke-width:1;fill:none}
+.sv-grid{stroke:var(--line);stroke-width:.6;stroke-dasharray:2 3;fill:none}
+.sv-text{fill:var(--muted);font:500 10px var(--f-m)}
+.sv-label{fill:var(--ink);font:700 12px var(--f-b)}
+.sv-p{fill:var(--c-k);opacity:.8}
+.sv-t{fill:none;stroke:var(--bad);stroke-width:2.5;stroke-linejoin:round}
+.sv-sun{fill:var(--ochre)}
+.sv-atm{fill:var(--petrol-soft)}
+.sv-ground{fill:var(--line)}
+.sv-sw{stroke:var(--ochre);stroke-width:2.5;fill:none}
+.sv-lw{stroke:var(--bad);stroke-width:2.5;fill:none}
+.sv-mo{fill:var(--ochre)}
+.sv-mh{fill:var(--bad)}
+.sv-badge{fill:var(--surface);stroke:var(--ink);stroke-width:1.2}
+.sv-l1{fill:none;stroke:var(--petrol);stroke-width:3;stroke-linejoin:round}
+.sv-l2{fill:none;stroke:var(--ochre);stroke-width:3;stroke-linejoin:round}
+.sv-gap{fill:var(--petrol-soft);opacity:.8}
+.sv-diag{stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 3;fill:none}
+.sv-hex{fill:var(--petrol-soft);stroke:var(--petrol);stroke-width:1.2}
+.sv-o{fill:var(--petrol)}
+.sv-m{fill:var(--ochre)}
+.sv-g{fill:var(--muted)}
+.sv-onp{fill:var(--on-petrol);font:800 13px var(--f-d)}
+
+/* Glossar */
+.search{position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);z-index:5;background:var(--paper);padding-block:4px}
+.gl{display:grid;gap:0}
+.gl h3{font-size:22px;color:var(--petrol);padding:14px 0 4px;border-bottom:2px solid var(--petrol)}
+.gi{padding:12px 0;border-bottom:1px solid var(--line);display:grid;gap:4px}
+.gi .h{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.gi .h b{font-size:18px}
+.gi .pg{font-family:var(--f-m);font-size:12px;color:var(--muted)}
+.gi .st{font-family:var(--f-m);font-size:11px;padding:1px 6px;border-radius:4px;border:1px solid var(--line);color:var(--muted)}
+.gi .st.s3{border-color:var(--ok);color:var(--ok)}
+.gi p{margin:0}
+.gi .x{color:var(--muted);font-size:15px}
+
+/* Reiter */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.tabs-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
+.tab{display:grid;justify-items:center;gap:2px;padding:8px 2px 10px;text-decoration:none;color:var(--muted);font-size:11.5px;font-weight:600;min-width:0}
+.tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab[aria-current="page"]{color:var(--petrol)}
+.tab[aria-current="page"] svg{stroke-width:2.4}
+@media (min-width:640px){ .modes{grid-template-columns:repeat(4,minmax(0,1fr))} }
+@media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} }
+</style>
+<header class="top">
+  <svg class="contour" viewBox="0 0 400 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="1">
+      <path d="M-10 40 C60 10 120 55 190 30 S320 5 410 28"/>
+      <path d="M-10 50 C70 22 130 64 200 40 S330 16 410 38"/>
+      <path d="M-10 60 C80 34 140 72 210 50 S340 28 410 48"/>
+      <path d="M-10 28 C50 0 110 42 180 20 S310 -6 410 16"/>
+      <ellipse cx="300" cy="22" rx="34" ry="10"/>
+      <ellipse cx="300" cy="22" rx="18" ry="5"/>
+      <ellipse cx="78" cy="44" rx="26" ry="7"/>
+    </g>
+  </svg>
+  <div class="top-in">
+    <span class="brand">Geo-Begriffstrainer</span>
+    <span class="mono">Profilfach · Jg. 13</span>
+  </div>
+</header>
+<main class="wrap">
+  <div class="chips" id="chips" role="group" aria-label="Themenfelder"></div>
+  <div id="view"></div>
+</main>
+<nav class="tabs" aria-label="Bereiche">
+  <div class="tabs-in">
+    <a class="tab" href="#start" data-r="start"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>Start</a>
+    <a class="tab" href="#karten" data-r="karten"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="14" height="12" rx="2"/><path d="M7 7V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"/></svg>Karten</a>
+    <a class="tab" href="#zuordnen" data-r="zuordnen"><svg viewBox="0 0 24 24"><circle cx="5" cy="7" r="2"/><circle cx="5" cy="17" r="2"/><rect x="15" y="5" width="6" height="4" rx="1"/><rect x="15" y="15" width="6" height="4" rx="1"/><path d="M7 7l8 10M7 17l8-10"/></svg>Zuordnen</a>
+    <a class="tab" href="#test" data-r="test"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8l2 2 4-4M8 15h8"/></svg>Test</a>
+    <a class="tab" href="#anwenden" data-r="anwenden"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Anwenden</a>
+    <a class="tab" href="#glossar" data-r="glossar"><svg viewBox="0 0 24 24"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19"/></svg>Glossar</a>
+  </div>
+</nav>
+<script>
+const TOPICS = {
+  k: "Klima & Erdsystem",
+  e: "Entwicklung & Globalisierung",
+  w: "Wirtschaft & Standorte",
+  s: "Stadt, Raum & Mobilität",
+  b: "Bevölkerung & Migration",
+  n: "Nachhaltigkeit & Ressourcen",
+  g: "Grundbegriffe"
+};
+
+/* [Begriff, Themenfeld, Buchseite, Erklärung, Beispiel] */
+const RAW = [
+/* Klima & Erdsystem */
+["Adaptation (Adaption)","k",56,"Anpassung von Gesellschaft, Wirtschaft und Ökosystemen an veränderte Umweltbedingungen, vor allem an die Folgen des Klimawandels. Ziel ist, Schäden zu begrenzen und Chancen zu nutzen. Gegenbegriff: Mitigation.","Deicherhöhung an der Nordsee, hitzeresistente Getreidesorten"],
+["Albedo","k",null,"Rückstrahlvermögen einer Oberfläche: der Anteil der einfallenden Sonnenstrahlung, der reflektiert wird. Helle Flächen reflektieren viel (Neuschnee bis ca. 90 %), dunkle wenig (Ozean unter 10 %). Schmilzt Eis, sinkt die Albedo und die Erwärmung verstärkt sich (Eis-Albedo-Rückkopplung).",""],
+["Anthropozän","k",null,"Vorgeschlagene Bezeichnung für einen Erdzeitabschnitt, in dem der Mensch zum prägenden Faktor für Klima, Böden, Gewässer und Lebewelt geworden ist. Als Beginn werden u. a. die Industrialisierung oder die Zeit um 1950 diskutiert. 2024 wurde es nicht als offizielle geologische Epoche anerkannt, als Konzept ist es weit verbreitet.",""],
+["natürlicher Treibhauseffekt","k",38,"Erwärmung der unteren Atmosphäre durch natürlich vorhandene Treibhausgase. Die Erdoberfläche nimmt kurzwellige Sonnenstrahlung auf und strahlt langwellige Wärmestrahlung ab; Treibhausgase absorbieren sie und strahlen einen Teil zur Erde zurück (Gegenstrahlung). Er hebt die Mitteltemperatur von etwa –18 °C auf +15 °C.",""],
+["anthropogener Treibhauseffekt","k",38,"Verstärkung des natürlichen Treibhauseffekts durch zusätzliche, vom Menschen freigesetzte Treibhausgase, v. a. aus der Verbrennung fossiler Energieträger, Entwaldung und Landwirtschaft. Er ist die Hauptursache des heutigen Klimawandels.",""],
+["Treibhausgas","k",38,"Gas, das langwellige Wärmestrahlung der Erde absorbiert und so zum Treibhauseffekt beiträgt. Wichtigstes natürliches Treibhausgas ist Wasserdampf; der Mensch setzt v. a. Kohlenstoffdioxid (CO₂), Methan (CH₄) und Lachgas (N₂O) zusätzlich frei.",""],
+["CO₂-Äquivalent (CO₂e)","k",null,"Maßeinheit, die die Klimawirkung verschiedener Treibhausgase vergleichbar macht. Jedes Gas wird in die Menge CO₂ umgerechnet, die über 100 Jahre dieselbe Erwärmung bewirkt.","1 t Methan entspricht rund 28 t CO₂e"],
+["Climate Engineering (Geoengineering)","k",56,"Großtechnische Eingriffe ins Klimasystem, um den Klimawandel abzuschwächen: entweder CO₂ aus der Atmosphäre entnehmen oder die Sonneneinstrahlung verringern. Beide Ansätze sind wegen schwer abschätzbarer Risiken umstritten.","Direct Air Capture, Aerosole in der Stratosphäre"],
+["Mitigation","k",56,"Alle Maßnahmen, die die Ursachen des Klimawandels bekämpfen, also Treibhausgasemissionen senken oder Kohlenstoffsenken stärken. Gegenbegriff: Adaptation.","Ausbau erneuerbarer Energien, Wiedervernässung von Mooren"],
+["eustatischer Anstieg","k",59,"Anstieg des Meeresspiegels, weil zusätzliches Wasser in die Ozeane gelangt, vor allem durch das Abschmelzen von Gletschern und Eisschilden an Land. Schmelzendes Meereis trägt dazu nicht bei.","Grönländischer Eisschild"],
+["thermosterischer Anstieg","k",59,"Anstieg des Meeresspiegels, weil sich Meerwasser bei Erwärmung ausdehnt. Neben dem eustatischen Anstieg die zweite Hauptursache des Meeresspiegelanstiegs.",""],
+["Jetstream","k",46,"Starkwindband in etwa 8–12 km Höhe nahe der Tropopause, das meist mit über 100 km/h von West nach Ost weht. Er entsteht aus großen Temperaturgegensätzen und wird durch die Corioliskraft abgelenkt. Seine Wellen steuern Hoch- und Tiefdruckgebiete; ein stark mäandrierender Jetstream kann Wetterlagen festsetzen.",""],
+["Kipppunkt (Kippelement)","k",null,"Kritische Schwelle, ab der ein Teilsystem des Erdsystems (Kippelement) durch kleine Veränderungen in einen neuen Zustand übergeht. Der Wandel verstärkt sich dann selbst und ist oft kaum umkehrbar.","Grönlandeis, Amazonas-Regenwald, Permafrost, atlantische Umwälzströmung"],
+["Klima","k",28,"Durchschnittlicher Zustand und typischer Ablauf des Wetters an einem Ort über einen langen Zeitraum, meist 30 Jahre. Dargestellt wird es z. B. im Klimadiagramm mit Temperatur und Niederschlag.",""],
+["Wetterextrem","k",25,"Wetter oder Witterung mit außergewöhnlich hohen oder niedrigen Werten eines Wetterelements, gemessen an Häufigkeit oder Heftigkeit. Eine einheitliche Definition gibt es nicht.","Hitzewelle, Starkregen, Sturm, lange Dürre"],
+["Weltklimarat (IPCC)","k",32,"Intergovernmental Panel on Climate Change: Gremium der Vereinten Nationen, das den Forschungsstand zum Klimawandel, seinen Risiken und Handlungsoptionen in regelmäßigen Sachstandsberichten zusammenfasst.",""],
+["Permafrost","k",70,"Untergrund, der mindestens zwei Jahre in Folge unter 0 °C bleibt; er nimmt rund ein Viertel der Landfläche der Nordhalbkugel ein, auch im Hochgebirge. Im Sommer taut nur die oberste Schicht auf. Taut er tiefer, setzen Mikroorganismen gespeicherten Kohlenstoff als CO₂ und Methan frei, deshalb gilt er als Kippelement.",""],
+["Planetare Grenzen","k",24,"Konzept von neun Belastungsgrenzen des Erdsystems (Rockström u. a. 2009), etwa für Klima, Biodiversität, Stickstoff- und Phosphorkreislauf, Süßwasser und Ozeanversauerung. Innerhalb liegt ein sicherer Handlungsraum. Laut Planetary Health Check 2025 sind sieben der neun Grenzen überschritten.",""],
+["Thermohaline Zirkulation","k",45,"Globales System von Meeresströmungen („Förderband“), angetrieben durch Dichteunterschiede aus Temperatur (thermo) und Salzgehalt (halin). Im Nordatlantik sinkt kaltes, salzreiches Wasser ab; an der Oberfläche bringen Golf- und Nordatlantikstrom Wärme nach Europa.",""],
+["Globaler Wandel","k",24,"Weltweite, miteinander verflochtene Veränderungen im Mensch-Umwelt-System, etwa Klimawandel, Artenverlust, Globalisierung und Verstädterung. Sie verlangen Anpassung und Gegensteuern.",""],
+["Boden","k",28,"Oberste, belebte Schicht der Erdkruste aus Mineralen, Humus, Wasser, Luft und Lebewesen. Er entsteht über lange Zeit aus Gestein und ist Grundlage für Pflanzenwachstum sowie Wasser- und Kohlenstoffspeicher.",""],
+["Sahelzone","k",null,"Semiaride Übergangszone in Afrika zwischen Sahara und Feuchtsavanne, vom Senegal bis zum Sudan. 200–600 mm Niederschlag fallen in einer kurzen Regenzeit und schwanken stark; Dürren und Desertifikation sind zentrale Probleme.",""],
+
+/* Entwicklung & Globalisierung */
+["Alphabetisierung","e",213,"Vermittlung von Lese- und Schreibfähigkeit. Die Alphabetisierungsrate ist ein wichtiger Bildungs- und Entwicklungsindikator.",""],
+["Good Governance","e",198,"Gute Regierungsführung: effiziente Verwaltung, Rechtsstaatlichkeit, Transparenz, Beteiligung der Bevölkerung und Bekämpfung von Korruption. Gilt als Voraussetzung für Entwicklung.",""],
+["Bad Governance","e",189,"Schlechte Regierungsführung mit Korruption, wenig Transparenz und Mitsprache sowie fehlendem Rechtsschutz für die Bevölkerung. Sie hemmt Investitionen und Entwicklung.",""],
+["Big Push","e",null,"Entwicklungsstrategie: Massive, gleichzeitige Investitionen in mehrere Wirtschaftssektoren und die Infrastruktur, oft mit Kapital von außen, sollen den Teufelskreis der Armut durchbrechen und selbsttragendes Wachstum auslösen.",""],
+["Bruttoinlandsprodukt (BIP)","e",191,"Wert aller Waren und Dienstleistungen, die in einem Jahr innerhalb eines Landes hergestellt werden. Pro Kopf gerechnet ein häufiger, aber rein wirtschaftlicher Entwicklungsindikator.",""],
+["Bruttonationaleinkommen (BNE)","e",191,"Summe aller Einkommen, die die Inländer eines Landes in einem Jahr erzielen, auch im Ausland. Die Weltbank teilt Länder nach dem BNE pro Kopf in Einkommensgruppen ein.",""],
+["Dependenztheorie","e",189,"Entwicklungstheorie, die Unterentwicklung exogen erklärt: durch die strukturelle Abhängigkeit der Peripherie von den Industrieländern, z. B. durch Rohstoffexport, ungünstige Terms of Trade und Nachwirkungen des Kolonialismus. Gegenposition zur Modernisierungstheorie.",""],
+["Modernisierungstheorie","e",189,"Entwicklungstheorie, nach der Länder schrittweise von traditionellen Agrar- zu modernen Industriegesellschaften nach westlichem Vorbild aufsteigen. Die Ursachen von Unterentwicklung liegen endogen im Land selbst; Entwicklung ist ein Nachholprozess.","Stufenmodell nach Rostow"],
+["Entwicklungsindikator","e",190,"Messbares Merkmal, mit dem der Entwicklungsstand eines Landes eingeordnet wird.","BNE pro Kopf, Lebenserwartung, Analphabetenquote, Säuglingssterblichkeit"],
+["Human Development Index (HDI)","e",190,"Index der Vereinten Nationen für den Entwicklungsstand eines Landes aus drei Dimensionen: Einkommen (BNE pro Kopf, kaufkraftbereinigt), Gesundheit (Lebenserwartung) und Bildung (Schuljahre). Werte zwischen 0 und 1.",""],
+["Gini-Koeffizient","e",191,"Maß für die Ungleichheit der Einkommens- oder Vermögensverteilung zwischen 0 (alle haben gleich viel) und 1 (einer hat alles). Je höher der Wert, desto ungleicher die Verteilung.","Südafrika ca. 0,63, Dänemark ca. 0,28"],
+["Gender-Gap-Index","e",68,"Index des Weltwirtschaftsforums, der die Lücke zwischen Männern und Frauen in Gesundheit, Bildung, wirtschaftlicher Teilhabe und politischer Mitsprache misst.",""],
+["SDG-Index","e",190,"Index, der für rund 165 Länder misst und vergleicht, wie weit sie bei der Umsetzung der 17 Ziele für nachhaltige Entwicklung (Agenda 2030) gekommen sind.",""],
+["Globaler Norden","e",189,"Möglichst wertfreie Bezeichnung für wirtschaftlich und politisch privilegierte Staaten, die früher Industrieländer genannt wurden. Gemeint ist eine Position im Weltsystem, keine Himmelsrichtung. Gegenstück: Globaler Süden.",""],
+["Globaler Süden","e",189,"Möglichst wertfreie Bezeichnung für Staaten, die früher Entwicklungs- und Schwellenländer genannt wurden. Der Begriff betont ihre gemeinsame Benachteiligung im Weltsystem statt nationaler Defizite.",""],
+["Fragmentierung","e",192,"Räumliche Trennung von Funktionen oder sozialen Gruppen. Nach der Theorie der fragmentierenden Entwicklung profitieren nicht ganze Länder, sondern nur einzelne Inseln (Städte, Regionen, Gruppen) von der Globalisierung, während andere abgekoppelt bleiben.",""],
+["Tigerstaat","e",240,"Dynamisch aufstrebende Volkswirtschaft auf dem Weg vom Entwicklungs- zum Industrieland; ursprünglich Südkorea, Taiwan, Singapur und Hongkong. Tigerstaaten zählen zu den Schwellenländern.",""],
+["Triade","e",231,"Die drei wirtschaftlich stärksten Großregionen der Welt: Nordamerika, Europa (EU) und Ostasien (früher v. a. Japan, heute Ost- und Südostasien).",""],
+["Trickle-down-Effekt","e",189,"Annahme, dass Wachstum und Gewinne, die zuerst bei Unternehmen, Wohlhabenden oder Zentren entstehen, nach und nach auch ärmere Gruppen und Räume erreichen („durchsickern“). Empirisch umstritten.",""],
+["Globalisierung","e",230,"Zunehmende weltweite Verflechtung von Staaten, Unternehmen und Menschen, vor allem wirtschaftlich, aber auch politisch, kulturell, sozial und ökologisch. Treiber sind sinkende Transport- und Kommunikationskosten und der Abbau von Handelsschranken.",""],
+["Global Player","e",231,"Multinationales Unternehmen, das weltweit Produktionsstandorte hat und den Weltmarkt beliefert.","Volkswagen, Apple, Siemens"],
+["Global City","e",152,"Weltstadt, die als Steuerungszentrale der globalisierten Wirtschaft dient. Hier konzentrieren sich Finanzmärkte, Banken, unternehmensnahe Dienstleister und Zentralen transnationaler Konzerne.","London, New York, Tokio"],
+["Command-and-Control-Funktion","e",238,"Steuerungs- und Kontrollfunktion über die Weltwirtschaft, die Konzernzentralen und Finanzinstitute in Global Cities ausüben.",""],
+["FIRE-Zentrum","e",238,"Finanzzentrum einer Global City; FIRE steht für Finance (Banken), Insurance (Versicherungen) und Real Estate (Immobilien).","Londoner City, Canary Wharf"],
+["Ausländische Direktinvestition (ADI)","e",231,"Investition eines Unternehmens in einem anderen Land, um dort dauerhaft Einfluss zu nehmen, z. B. durch ein neues Werk oder den Kauf eines Unternehmens. Hohe ADI zeigen einen attraktiven Standort und wirtschaftliche Verflechtung.",""],
+["Freihandelszone","e",262,"Zusammenschluss von Staaten, die untereinander Zölle und andere Handelshemmnisse abbauen, gegenüber Drittstaaten aber eigene Zölle behalten.","USMCA in Nordamerika, EFTA"],
+["Sonderwirtschaftszone","e",242,"Abgegrenztes Gebiet innerhalb eines Staates, in dem Unternehmen mit Zollfreiheit, Steuervorteilen oder weniger Auflagen angelockt werden, um Investitionen und Exporte zu fördern.","Shenzhen (China) seit 1980"],
+["Landgrabbing","e",200,"Großflächiger, teils unrechtmäßiger Erwerb oder Pacht von Land durch Unternehmen, Staaten oder Investoren, meist im Globalen Süden. Angebaut werden Nahrungs- oder Rohstoffpflanzen für den Export; die lokale Bevölkerung verliert Nutzflächen.",""],
+["Mikrokredit","e",216,"Sehr kleiner Kredit an Kleinstunternehmer, oft Frauen, im Globalen Süden, die bei normalen Banken keinen Kredit bekommen. Er soll eine eigene Existenzgrundlage ermöglichen.","Grameen Bank in Bangladesch"],
+["Informelle Zahlung","e",174,"Zahlung außerhalb gesetzlicher Regeln, um eine Leistung schneller, bevorzugt oder überhaupt zu erhalten, vor allem bei Mangel; eine Form von Korruption.","Zusatzzahlung, um im Krankenhaus behandelt zu werden"],
+["Cash Crops","e",250,"Agrarprodukte, die für den Verkauf, meist für den Export, angebaut werden, um Einkommen und Devisen zu erzielen. Gegenbegriff: Food Crops.","Kakao in Côte d’Ivoire, Kaffee in Äthiopien"],
+["Food Crops","e",250,"Agrarprodukte, die vor allem zur Selbstversorgung der Bauernfamilien oder des eigenen Landes angebaut werden. Gegenbegriff: Cash Crops.","Hirse, Maniok"],
+["Flex Crops","e",251,"Agrarprodukte, die je nach Nachfrage und Preis flexibel als Nahrungsmittel, Futtermittel, Biokraftstoff oder Industrierohstoff verwendet werden.","Soja, Mais, Ölpalme, Zuckerrohr"],
+["Subsistenzwirtschaft","e",224,"Wirtschaftsform, die nur den Eigenbedarf deckt, kaum für den Markt produziert und wenig Arbeitsteilung kennt.","Bauernfamilie baut Nahrung an und fertigt Werkzeug selbst"],
+["Handelsbilanz","e",null,"Gegenüberstellung der Werte der Warenexporte und -importe eines Landes in einem Zeitraum. Ein Überschuss entsteht, wenn mehr exportiert als importiert wird, ein Defizit im umgekehrten Fall.","Deutschland: Überschuss; USA: Defizit"],
+["Regionalisierung","e",236,"Ausrichtung auf die regionale Maßstabsebene: Im Globalisierungsprozess konzentrieren sich Wachstum und Investitionen auf einzelne Regionen (z. B. Global Cities), nicht auf ganze Länder.",""],
+["Bewaffneter Konflikt","e",25,"Konflikt zwischen Staaten oder Gruppen, der mit Waffengewalt ausgetragen wird; Ursachen sind unvereinbare Interessen, Ressourcen, Weltanschauungen oder Machtansprüche.",""],
+["Krieg","e",25,"Organisierter, mit Waffen und massiver Gewalt ausgetragener Konflikt zwischen Staaten oder Gruppen, in dem eine Seite Überlegenheit erzwingen will.",""],
+
+/* Wirtschaft & Standorte */
+["Ankermieter","w",null,"Großer, bekannter Mieter in einem Einkaufszentrum oder Gewerbeobjekt, der viel Kundschaft anzieht und dadurch auch andere Mieter anlockt.","Elektronikmarkt im Einkaufszentrum"],
+["Basisinnovation","w",145,"Grundlegende Neuerung, die ganze Wirtschafts- oder Technikbereiche verändert, sich rasch verbreitet und lange Wachstumsphasen auslöst.","Dampfmaschine, Elektrizität, Mikrochip"],
+["Konjunkturzyklus","w",145,"Regelmäßiges Auf und Ab der Wirtschaftsentwicklung in vier Phasen: Aufschwung, Hochkonjunktur, Abschwung, Tiefphase.",""],
+["Produktlebenszyklus","w",145,"Modell für den Weg eines Produkts von der Markteinführung über Wachstum, Reife und Sättigung bis zur Einstellung der Produktion. Mit den Phasen wandern oft auch die Produktionsstandorte.",""],
+["Cluster","w",140,"Räumliche Konzentration von Unternehmen einer Branche mit Zulieferern, Hochschulen und Forschungseinrichtungen, die zusammenarbeiten und voneinander profitieren.","Silicon Valley, maritime Wirtschaft in Norddeutschland"],
+["Bildungscluster","w",287,"Regionaler Verbund von Bildungs-, Forschungs- und Entwicklungseinrichtungen, die strategisch zusammenarbeiten, um Fachkräfte für den regionalen Arbeitsmarkt auszubilden.",""],
+["Coworking-Space","w",132,"Gemeinschaftsbüro, in dem Selbstständige, Freiberufler oder Start-ups flexibel einzelne Arbeitsplätze oder Räume mieten und sich vernetzen.",""],
+["Co-Creation","w",157,"Gemeinsame, kreative Entwicklung von Ideen oder Produkten durch Akteure verschiedener Branchen und Fachrichtungen, oft auch mit Kunden.",""],
+["Deregulierung","w",152,"Abbau staatlicher Regeln, Eingriffe und Bürokratie auf Arbeits-, Güter- oder Finanzmärkten, um Wettbewerb und Effizienz zu steigern.",""],
+["Digitalisierung","w",94,"Technischer Wandel, bei dem Informationen digital verarbeitet und übertragen werden; im weiteren Sinn der Einfluss digitaler Technik auf Wirtschaft und Alltag.","Onlinehandel, Homeoffice, Smart City"],
+["Diversifizierung","w",208,"Verbreiterung der Wirtschaftsstruktur auf mehrere Branchen oder Produkte, um die Abhängigkeit von einem einzigen Produkt zu verringern.","Golfstaaten investieren in Tourismus statt nur in Erdöl"],
+["Feeder","w",258,"Kleines Zubringerschiff, das Container zwischen großen Umschlaghäfen (Hubs) und kleineren Häfen verteilt.","Hamburg – Häfen an der Ostsee"],
+["Hinterlandanbindung","w",258,"Verbindung eines Hafens mit dem Binnenland über Straße, Schiene und Binnenschifffahrt. Sie bestimmt das Einzugsgebiet und die Wettbewerbsfähigkeit des Hafens.",""],
+["Hub","w",136,"Knotenpunkt (engl. Nabe): zentraler Umschlagplatz in Verkehr und Logistik oder ein Ort, an dem sich z. B. Start-ups einer Branche konzentrieren.","Flughafen Frankfurt, Hafen Rotterdam"],
+["Inkubator","w",137,"Einrichtung, die Start-ups bei der Gründung begleitet, z. B. mit Räumen, Beratung, Wissen und Kontakten.",""],
+["Intermodale Transportkette","w",259,"Transport mit zwei oder mehr Verkehrsträgern, bei dem nur die Ladeeinheit (z. B. der Container) das Verkehrsmittel wechselt; die Güter selbst werden nicht umgeladen.","Schiff – Bahn – Lkw"],
+["ISO-Container","w",258,"Genormter Stahlbehälter (20 Fuß = 1 TEU), der weltweit auf Schiff, Bahn und Lkw passt. Grundlage der Containerisierung und der globalen Logistik.",""],
+["Knotenpunkt","w",238,"Ort, an dem viele bedeutende Verkehrswege oder Infrastrukturen zusammenlaufen, z. B. Autobahnen, Bahnstrecken, Fluglinien oder Datenleitungen.",""],
+["Logistikkette","w",261,"Verbund aller Unternehmen, die daran beteiligt sind, ein Produkt bis zum Endkunden zu bringen: Produzenten, Zulieferer und Transporteure.",""],
+["Massengut","w",261,"Gut, das unverpackt in großen Mengen transportiert wird. Sein Wert ist im Verhältnis zum Gewicht gering, deshalb spielen Transportkosten eine große Rolle.","Kohle, Erz, Getreide, Kies"],
+["Stückgut","w",261,"Gut, das einzeln verpackt in Kisten, Säcken, Fässern, Ballen oder Containern transportiert wird.",""],
+["Tiefwasserhafen","w",253,"Seehafen mit großer Wassertiefe, an dem auch die größten Containerschiffe (Tiefgang bis ca. 16 m) unabhängig von der Tide anlegen können.","JadeWeserPort Wilhelmshaven"],
+["Kreative Klasse","w",134,"Nach Richard Florida gut ausgebildete, kreative Berufsgruppen (z. B. Wissenschaft, Design, Medien), die Innovationen hervorbringen und die Wettbewerbsfähigkeit von Städten maßgeblich stärken.",""],
+["TTTT-Index","w",134,"Erweiterung von Floridas Modell der drei Standortfaktoren Talent, Technologie und Toleranz um das vierte T, das Territorium (Qualität des Ortes). Zusammen bestimmen sie die Zukunftsfähigkeit einer Stadt oder Region.",""],
+["KMU","w",null,"Kleine und mittlere Unternehmen; nach EU-Definition unter 250 Beschäftigte und höchstens 50 Mio. € Umsatz (IfM Bonn: unter 500 Beschäftigte). In Deutschland sind rund 99 % aller Unternehmen KMU; sie stellen gut die Hälfte der Beschäftigten und den Großteil der Ausbildungsplätze.",""],
+["Multiplikatoreffekt","w",null,"Eine Investition oder Ansiedlung löst zusätzliche wirtschaftliche Aktivität aus, die über den ursprünglichen Impuls hinausgeht.","Neue Fabrik schafft auch Jobs bei Zulieferern und im Einzelhandel"],
+["Niedriglohnsektor","w",175,"Bereich des Arbeitsmarkts mit Stundenlöhnen unter zwei Dritteln des mittleren Bruttostundenlohns (Median).","Reinigung, Gastronomie, Lebensmittelindustrie"],
+["Outsourcing","w",255,"Auslagerung von Aufgaben, die ein Unternehmen bisher selbst erledigt hat, an andere Firmen, meist um Kosten zu sparen. Geschieht dies ins Ausland, spricht man von Offshoring.",""],
+["Tertiärisierung","w",146,"Strukturwandel, bei dem der Anteil der Beschäftigten und der Wertschöpfung im Dienstleistungssektor (tertiärer Sektor) steigt.",""],
+["Quartärisierung","w",146,"Zunahme hochqualifizierter, wissensbasierter Tätigkeiten (quartärer Sektor), etwa Forschung und Entwicklung, Beratung, Management und Informationsdienstleistungen.",""],
+["Spin-off-Effekt","w",null,"Gründung eines neuen Unternehmens aus einem bestehenden Betrieb oder einer Forschungseinrichtung heraus, oft durch ehemalige Mitarbeitende.","Ausgründungen aus Universitäten"],
+["Start-up","w",136,"Junges Unternehmen mit innovativer Geschäftsidee und hohem Wachstumspotenzial, das sich noch im Aufbau befindet und oft auf Risikokapital angewiesen ist.",""],
+["Standortfaktor","w",130,"Faktor, den ein Unternehmen bei der Wahl seines Standorts berücksichtigt. Harte Standortfaktoren sind messbar (Arbeitskräfte, Verkehrsanbindung, Steuern), weiche betreffen Image und Lebensqualität.",""],
+["Gunstfaktoren","w",null,"Gegebenheiten, die eine Nutzung oder Entwicklung in einem Raum begünstigen. Gegenbegriff: Ungunstfaktoren.","fruchtbare Böden, gute Verkehrsanbindung, politische Stabilität"],
+["Ungunstfaktoren","w",null,"Gegebenheiten, die eine Nutzung oder Entwicklung in einem Raum erschweren. Gegenbegriff: Gunstfaktoren.","abgelegene Lage, Naturgefahren, Wassermangel"],
+["Strukturwandel","w",142,"Dauerhafte, kaum umkehrbare Veränderung der Wirtschaftsstruktur eines Raumes, z. B. vom primären und sekundären zum tertiären Sektor.","Ruhrgebiet, Lausitz nach dem Kohleausstieg"],
+["Transformationsprozess","w",142,"Grundlegender gesellschaftlicher und wirtschaftlicher Umbau, z. B. von der Plan- zur Marktwirtschaft in Ostdeutschland oder der Umbau einer Region nach dem Braunkohleausstieg.",""],
+["Synergieeffekt","w",238,"Positive Wirkung, die entsteht, wenn Unternehmen oder Akteure zusammenarbeiten und gemeinsam mehr erreichen als jeder für sich, etwa durch geteilte Infrastruktur, gebündeltes Wissen oder geringere Kosten.",""],
+["Wertschöpfungskette","w",null,"Abfolge aller Stufen vom Rohstoff über Verarbeitung und Vertrieb bis zum Konsum, auf denen Wert hinzukommt. Bei globalen Wertschöpfungsketten verteilen sich die Stufen auf viele Länder; Gewinne fallen meist bei Forschung, Design und Marke an.","Smartphone: Rohstoffe aus Afrika, Montage in Asien"],
+["Soziale Marktwirtschaft","w",282,"Wirtschaftsordnung Deutschlands, die freien Wettbewerb, Privateigentum und unternehmerische Freiheit mit sozialem Ausgleich verbindet, z. B. durch Arbeitnehmer- und Umweltschutz und soziale Sicherung.",""],
+["Onlinehandel","w",100,"Kauf und Verkauf von Waren und Dienstleistungen über das Internet (E-Commerce). Er verändert Innenstädte und erhöht den Lieferverkehr.",""],
+["Factory Outlet Center (FOC)","w",98,"Einkaufszentrum, in dem Hersteller ihre Markenware direkt und verbilligt verkaufen, meist mit über 3000 m² Verkaufsfläche und oft auf der grünen Wiese.","Designer Outlet Neumünster"],
+["Grüne Wiese","w",98,"Bisher unbebaute Fläche am Stadtrand, auf der z. B. Einkaufszentren oder Gewerbegebiete entstehen. Sie konkurrieren mit der Innenstadt.",""],
+["Eventifizierung","w",98,"Strategie, Besucherzahlen z. B. von Einkaufszentren oder Innenstädten durch Veranstaltungen und Erlebnisangebote zu steigern.",""],
+["Social Entrepreneurship","w",286,"Soziales Unternehmertum: Unternehmen, die mit innovativen Ideen gesellschaftliche oder ökologische Probleme lösen wollen; Gewinn ist Mittel, nicht Hauptziel. Die Gründerinnen und Gründer heißen Social Entrepreneurs.",""],
+
+/* Stadt, Raum & Mobilität */
+["Agglomerationsraum (Ballungsraum)","s",null,"Verdichtungsraum aus einer Kernstadt und ihrem Umland mit hoher Bevölkerungs- und Arbeitsplatzdichte; Wohnen, Arbeiten und Infrastruktur sind eng verflochten, etwa durch Pendlerströme.","Rhein-Ruhr, Hamburg mit Umland"],
+["Bebauungsplan (B-Plan)","s",86,"Rechtsverbindlicher Bauleitplan einer Gemeinde für ein Teilgebiet. Er legt fest, wie gebaut und genutzt werden darf (Art und Maß der Nutzung, Bauhöhe, Verkehrsflächen), und wird aus dem Flächennutzungsplan entwickelt.",""],
+["Flächennutzungsplan (F-Plan)","s",86,"Vorbereitender Bauleitplan, der für das gesamte Gemeindegebiet die beabsichtigte Bodennutzung in Grundzügen darstellt, z. B. Wohn-, Gewerbe- und Grünflächen.",""],
+["Landesentwicklungsplan","s",90,"Zentrales Planungsinstrument eines Bundeslandes mit Zielen für die langfristige räumliche Entwicklung, z. B. zentrale Orte, Entwicklungsachsen und Flächen für Windenergie.","LEP Schleswig-Holstein"],
+["Raumordnung","s",90,"Übergeordnete staatliche Planung, die Ziele für die Entwicklung von Räumen setzt und Nutzungen wie Wohnen, Wirtschaft, Verkehr und Naturschutz abstimmt. Leitziel in Deutschland sind gleichwertige Lebensverhältnisse in allen Landesteilen.",""],
+["Masterplan","s",107,"Strategisches Gesamtkonzept für die Entwicklung eines Stadtteils oder Gebiets, das Ziele und Maßnahmen bündelt; rechtlich nicht verbindlich.","Masterplan HafenCity Hamburg"],
+["Zentrale-Orte-Prinzip","s",null,"Raumordnungskonzept nach Christaller (1933): Orte werden nach ihrem Bedeutungsüberschuss, also ihrer Versorgungsleistung für das Umland, eingestuft. Oberzentren decken den spezialisierten, Mittelzentren den periodischen, Grundzentren den täglichen Bedarf.","Kiel = Oberzentrum, Rendsburg = Mittelzentrum"],
+["Entwicklungsachse","s",92,"Bandartiges Gebiet entlang einer leistungsfähigen Verkehrsachse, in dem Infrastruktur, Gewerbe und Wohnungsbau gebündelt werden.",""],
+["Daseinsgrundfunktionen","s",88,"Grundbedürfnisse, die Menschen in einem Raum erfüllen wollen: wohnen, arbeiten, sich versorgen, sich bilden, sich erholen, am Verkehr teilnehmen und in Gemeinschaft leben.",""],
+["Infrastruktur","s",88,"Grundlegende Einrichtungen, die Leben und Wirtschaften in einem Raum ermöglichen: Verkehrswege, Strom- und Wasserleitungen, Telekommunikation, aber auch Schulen und Krankenhäuser.",""],
+["Erreichbarkeit","s",100,"Lagequalität eines Ortes: wie schnell und günstig andere wichtige Orte oder Einrichtungen der Daseinsgrundfunktionen von dort erreicht werden können.",""],
+["Raumnutzungskonflikt","s",88,"Konflikt, wenn verschiedene Akteure einen Raum unterschiedlich nutzen wollen, meist aus unterschiedlichen Nachhaltigkeitsdimensionen heraus.","Windpark vs. Naturschutz vs. Tourismus"],
+["Disparität","s",162,"Ungleichheit der Lebensbedingungen und Entwicklungschancen zwischen Räumen, z. B. zwischen Stadt und Land.",""],
+["Kohäsionspolitik","s",162,"Regionalpolitik der EU, die mit Fördermitteln wirtschaftliche und soziale Disparitäten zwischen den Regionen verringern will.",""],
+["Bottom-up-Ansatz","s",132,"Entwicklung, die von Bürgern oder lokalen Gruppen ausgeht und von unten nach oben wirkt. Gegenbegriff: Top-down-Ansatz.","Anwohnerinitiative für eine verkehrsberuhigte Straße"],
+["Top-down-Ansatz","s",null,"Maßnahme, die von Politik oder Verwaltung beschlossen und von oben umgesetzt wird. Gegenbegriff: Bottom-up-Ansatz.","Die Stadt richtet eine Umweltzone ein"],
+["Gentrifizierung","s",110,"Aufwertung innenstadtnaher Wohnviertel durch Sanierung und Zuzug einkommensstärkerer Gruppen. Mieten und Bodenpreise steigen, einkommensschwächere Bewohner werden verdrängt.",""],
+["Suburbanisierung","s",172,"Abwanderung von Bevölkerung, Gewerbe und Einzelhandel aus der Kernstadt in das Umland.",""],
+["Revitalisierung","s",106,"Wiederbelebung brachgefallener oder verfallener Flächen und Gebäude durch neue Nutzung und Sanierung.",""],
+["Waterfront Development","s",106,"Umgestaltung innenstadtnaher, meist brachgefallener Hafen- und Uferflächen zu neuen Stadtquartieren mit Wohnen, Büros, Kultur und Freizeit.","HafenCity Hamburg"],
+["Konversion","s",152,"Umwandlung früher militärisch genutzter Flächen und Gebäude für eine zivile Nutzung.",""],
+["Landverbrauch","s",93,"Umwandlung von unbebautem Land in Siedlungs-, Verkehrs- oder Erholungsflächen.",""],
+["Smart City","s",156,"Stadt, die digitale Technologien und Daten nutzt, um Verwaltung, Verkehr, Energie und Lebensqualität effizienter und nachhaltiger zu gestalten.",""],
+["Superblock","s",117,"Zusammenfassung mehrerer Häuserblocks zu einer Einheit, um die der Durchgangsverkehr herumgeführt wird; im Inneren entstehen Plätze und Grün für Fuß- und Radverkehr.","Barcelona"],
+["Fahrradquartier","s",115,"Stadtviertel, in dem Rad- und Fußverkehr Vorrang haben, mit viel Platz und Abstellmöglichkeiten für Räder.",""],
+["Veloroute","s",115,"Innerstädtische, gut ausgebaute und ausgeschilderte Fahrradroute als Teil eines zusammenhängenden Radnetzes.","Velorouten in Kiel"],
+["Multimodal-Straße","s",117,"Straße, auf der verschiedene Verkehrsmittel (Fuß, Rad, Bus, Auto) nebeneinander Platz finden.",""],
+["Modal Split","s",114,"Verteilung des Verkehrsaufkommens auf verschiedene Verkehrsmittel (zu Fuß, Rad, ÖPNV, Auto) in Prozent.",""],
+["Motorisierter Individualverkehr (MIV)","s",119,"Verkehr mit Fahrzeugen, die meist nur von einer oder wenigen Personen genutzt werden, v. a. Pkw und Motorrad.",""],
+["ÖPNV","s",94,"Öffentlicher Personennahverkehr: Beförderung mit öffentlichen Verkehrsmitteln wie Bus, Straßenbahn und U-Bahn innerhalb von Städten und ins Umland.",""],
+["Parking Day","s",119,"Jährlicher internationaler Aktionstag (meist am dritten Freitag im September), an dem Parkplätze für einen Tag zu Orten für Menschen umgestaltet werden.",""],
+["Place","s",246,"Ort, der für Menschen eine besondere Bedeutung, Identität und emotionale Bindung hat, im Unterschied zu einer bloßen Stelle im Raum.",""],
+["Placelessness","s",246,"Ortlosigkeit: Verlust der Eigenart von Orten, weil sie austauschbar und überall gleich gestaltet werden.","gleich aussehende Fußgängerzonen und Einkaufszentren"],
+["Wohnmodell","s",281,"Bestimmte Art zu wohnen, die von Lebensstil und Werten geprägt ist.","WG, Mehrgenerationenhaus, Eigenheim, Tiny House"],
+["Mehrgenerationenhaus","s",281,"Wohnprojekt oder Begegnungsort, an dem Menschen verschiedener Generationen, auch ohne verwandt zu sein, zusammen wohnen oder sich treffen.",""],
+["Tiny House","s",280,"Sehr kleines, vollständig eingerichtetes Haus mit etwa 15–45 m² Wohnfläche, das wenig Fläche und Ressourcen verbraucht.",""],
+["Woodcube","s",281,"Wohnhaus in Hamburg-Wilhelmsburg aus leimfreien Massivholzelementen, das in Bau und Betrieb als CO₂-neutral gilt.",""],
+
+/* Bevölkerung & Migration */
+["Migration","b",170,"Verlagerung des Lebensmittelpunkts über eine administrative Grenze für längere Zeit, innerhalb eines Landes oder international. Nach UN-Definition gelten 3–12 Monate als kurzfristige, ab einem Jahr als langfristige Migration.",""],
+["Binnenmigration","b",170,"Wanderung innerhalb eines Staates, ohne dass Staatsgrenzen überschritten werden.","Land-Stadt-Wanderung in China"],
+["Flucht","b",170,"Erzwungene Migration: Menschen verlassen ihre Heimat wegen Krieg, Verfolgung, Gewalt, Hunger oder Umweltkatastrophen.",""],
+["Push-Faktor","b",170,"Belastende Bedingung im Herkunftsgebiet, die Menschen zur Abwanderung drängt.","Arbeitslosigkeit, Krieg, Dürre"],
+["Pull-Faktor","b",170,"Anziehende Bedingung im Zielgebiet, die Menschen zur Zuwanderung bewegt.","höhere Löhne, Sicherheit, Netzwerke"],
+["Brain Drain","b",174,"Abwanderung hochqualifizierter Menschen aus ihrem Herkunftsland. Dort fehlen dann Fachkräfte und Innovationskraft.","Ärztinnen aus Ghana nach Großbritannien"],
+["Brain Gain","b",175,"Gewinn eines Ziellandes durch die Zuwanderung hochqualifizierter Menschen, z. B. weniger Fachkräftemangel und eingesparte Ausbildungskosten.",""],
+["Pushback","b",null,"Zurückweisung von Geflüchteten an oder hinter einer Grenze, ohne ihren Schutzbedarf zu prüfen. Pushbacks verstoßen gegen das Völkerrecht (Non-Refoulement-Gebot).",""],
+["Modell des demografischen Übergangs","b",197,"Modell, das die Bevölkerungsentwicklung in Phasen beschreibt: von hohen Geburten- und Sterberaten über eine Phase starken Wachstums (die Sterberate sinkt zuerst) bis zu niedrigen Geburten- und Sterberaten. Abgeleitet aus der Entwicklung Europas.",""],
+["Demografische Dividende","b",null,"Wirtschaftlicher Wachstumsvorteil, wenn nach einem Geburtenrückgang der Anteil der Menschen im Erwerbsalter besonders hoch ist. Das Zeitfenster wird nur genutzt, wenn Bildung und Arbeitsplätze vorhanden sind.","Südkorea ab den 1970er-Jahren"],
+["Tragfähigkeit","b",195,"Maximale Zahl von Menschen (oder Lebewesen), die in einem Raum dauerhaft leben können, ohne seine natürlichen Grundlagen zu schädigen.",""],
+
+/* Nachhaltigkeit & Ressourcen */
+["Nachhaltigkeit","n",8,"Leitprinzip, Handeln so auszurichten, dass heutige und künftige Generationen ihre Bedürfnisse befriedigen können, ohne die Umwelt zu zerstören. Dimensionen: Ökologie, Ökonomie, Soziales, oft auch Politik.",""],
+["Agroforstwirtschaft","n",164,"Landnutzung, die Ackerbau oder Tierhaltung mit Bäumen und Sträuchern auf derselben Fläche kombiniert; sie schützt Böden und speichert Kohlenstoff.","Kakao unter Schattenbäumen"],
+["Ökologische Landwirtschaft","n",74,"Landwirtschaft, die möglichst in natürlichen Kreisläufen wirtschaftet: ohne synthetische Dünger, chemisch-synthetische Pflanzenschutzmittel und Gentechnik, mit artgerechter Tierhaltung.",""],
+["Konventionelle Landwirtschaft","n",75,"Ertragsorientierte Landwirtschaft, oft mit Monokulturen auf großen Flächen, mineralischem Dünger und chemischem Pflanzenschutz, um möglichst hohe Erträge zu erzielen.",""],
+["Monokultur","n",163,"Großflächiger Anbau einer einzigen Nutzpflanzenart in Land- oder Forstwirtschaft. Monokulturen sind anfällig für Schädlinge und belasten die Böden.","Soja in Brasilien, Fichtenforste"],
+["Blue Economy","n",161,"Konzept einer nachhaltigen und fairen Kreislaufwirtschaft, die Vorbilder aus der Natur nutzt und Abfälle als Ressourcen sieht. Der Begriff wird auch für die nachhaltige Nutzung der Meere verwendet.",""],
+["Cradle-to-Cradle (C2C)","n",161,"„Von der Wiege zur Wiege“: Konzept (u. a. Michael Braungart), nach dem Produkte so gestaltet werden, dass ihre Materialien vollständig in biologische oder technische Kreisläufe zurückkehren und kein Abfall entsteht.",""],
+["Kreislaufwirtschaft","n",158,"Wirtschaftsweise, bei der Materialien und Produkte möglichst lange genutzt, geteilt, repariert, wiederverwendet und recycelt werden, statt sie wegzuwerfen.",""],
+["Doughnut-Modell","n",158,"Modell der Ökonomin Kate Raworth: Zwischen dem sozialen Fundament (innerer Ring) und den planetaren Grenzen (äußerer Ring) liegt ein sicherer und gerechter Raum für nachhaltige Entwicklung.",""],
+["Nachhaltiger Tourismus","n",220,"Tourismus, der ökologische, ökonomische und soziale Folgen berücksichtigt, z. B. durch faire Löhne, Rücksicht auf die Einheimischen und Schonung der Natur.",""],
+["Overtourismus","n",158,"Zu viele Touristen an einem beliebten Ziel, sodass Natur, Infrastruktur und Lebensqualität der Einheimischen stark leiden.","Venedig, Hallstatt"],
+["Rebound-Effekt","n",236,"Effizienzgewinne werden durch verändertes Verhalten teilweise oder ganz aufgezehrt, sodass weniger eingespart wird als erwartet oder der Verbrauch sogar steigt.","Sparsamere Autos werden größer gekauft und mehr gefahren"],
+["Smart Grid","n",159,"Intelligentes Stromnetz, das Erzeugung, Speicherung und Verbrauch digital steuert; Voraussetzung, um schwankende erneuerbare Energien zu integrieren.",""],
+["Gütesiegel","n",292,"Kennzeichnung auf Produkten, die bestimmte ökologische oder soziale Standards bestätigt, etwa bei Anbau, Herstellung oder Arbeitsbedingungen.","Fairtrade-Siegel, EU-Bio-Siegel"],
+["Greenwashing","n",282,"Versuch von Unternehmen oder Institutionen, sich durch PR, Spenden oder einzelne Projekte ein umweltfreundliches Image zu geben, ohne die tatsächliche Umweltbilanz grundlegend zu verbessern.",""],
+["Corporate Social Responsibility (CSR)","n",282,"Gesellschaftliche Verantwortung von Unternehmen: freiwilliges ökologisches und soziales Engagement über gesetzliche Pflichten hinaus, z. B. in den Lieferketten.",""],
+["Gemeinwohlökonomie","n",164,"Wirtschaftsmodell, das das Wohl von Mensch und Umwelt statt Gewinnmaximierung an oberste Stelle setzt; Unternehmen bilanzieren ihren Beitrag zum Gemeinwohl.",""],
+["Externalisierte Kosten","n",null,"Kosten, die ein Produzent oder Konsument verursacht, aber nicht selbst trägt, sodass sie nicht im Preis enthalten sind. Sie werden auf Dritte, die Allgemeinheit, andere Länder oder künftige Generationen abgewälzt.","Gesundheitsschäden durch Luftverschmutzung"],
+["CO₂-Fußabdruck","n",null,"Summe aller Treibhausgasemissionen in CO₂-Äquivalenten, die eine Person, ein Produkt, ein Unternehmen oder ein Staat direkt und indirekt verursacht.","in Deutschland ca. 10 t pro Kopf und Jahr"],
+["Lebensstil","n",278,"Alltägliches Verhalten, etwa bei Konsum, Ernährung, Mobilität und Wohnen, das auf bestimmten Werten und Lebensvorstellungen beruht.",""],
+["LOHAS","n",298,"Lifestyle of Health and Sustainability: Lebensstil, der Gesundheit und Nachhaltigkeit verbindet, meist durch bewussten Konsum statt Verzicht.",""],
+["Minimalismus","n",294,"Lebensstil, der auf Einfachheit, Genügsamkeit und bewusst reduzierten Konsum setzt.",""],
+["Veganismus","n",288,"Lebens- und Ernährungsweise ohne tierische Produkte; sie verringert u. a. Flächenbedarf, Wasserverbrauch und Emissionen der Tierhaltung.",""],
+["Virtuelles Wasser","n",63,"Wassermenge, die entlang der gesamten Wertschöpfungskette zur Herstellung eines Produkts verbraucht wird.","1 kg Rindfleisch: ca. 15 000 l"],
+["Wasserknappheit","n",62,"Zustand, in dem die Nachfrage nach (sauberem) Wasser das verfügbare Angebot übersteigt.",""],
+["Sicheres Trinkwasser","n",62,"Wasser, das für Genuss und Gebrauch geeignet und bei Bedarf auf dem eigenen Grundstück oder in der Wohnung verfügbar ist (SDG 6).",""],
+["Grundversorgung","n",62,"Bereitstellung lebensnotwendiger Güter und Dienste für alle Menschen, z. B. Trinkwasser, Energie und Gesundheitsversorgung.",""],
+["Wasser","n",28,"Lebensnotwendige Ressource und Geofaktor. Nur rund 2,5 % des Wassers der Erde sind Süßwasser, und davon ist der größte Teil in Eis und Grundwasser gebunden.",""],
+["Repair-Café","n",115,"Treffpunkt, an dem Menschen kaputte Gegenstände allein oder mit Ehrenamtlichen reparieren; Werkzeug und Material sind vorhanden.",""],
+["Zero Waste City","n",131,"Stadt mit dem Ziel, Abfälle möglichst vollständig zu vermeiden: durch weniger Müllentstehung und die Nutzung anfallender Abfälle als Rohstoff.","Kiel"],
+
+/* Grundbegriffe */
+["Basiskonzept","g",8,"Grundlegende Betrachtungs- und Denkweisen des Fachs Geographie, mit denen Räume systematisch und vertieft untersucht werden.","System, Struktur–Funktion–Prozess, Maßstabsebenen, Raumkonzepte"],
+["Geofaktor","g",28,"Natürliches oder vom Menschen geschaffenes Element, das einen Raum prägt und mit anderen Geofaktoren in Wechselwirkung steht.","Klima, Wasser, Boden, Relief, Gestein, Vegetation; Siedlung, Verkehr"],
+["Werte","g",278,"Grundlegende Überzeugungen darüber, was gut und erstrebenswert ist; sie leiten Entscheidungen und Lebensstile.","Freiheit, Gerechtigkeit, Nachhaltigkeit"],
+["Normen","g",298,"Aus Werten abgeleitete, konkrete Regeln oder Erwartungen für Verhalten, gesellschaftlich oder rechtlich festgelegt.",""],
+["Zielgruppe","g",16,"Gruppe von Adressaten mit gemeinsamen Merkmalen (z. B. Alter, Interessen, Lebensstil), auf die eine Botschaft, ein Plakat oder ein Projekt zugeschnitten wird.",""],
+["Social Media","g",230,"Digitale Plattformen, über die Nutzerinnen und Nutzer Inhalte erstellen, teilen und sich weltweit vernetzen.",""]
+];
+
+const TERMS = RAW.map((r, i) => ({ id: i, name: r[0], t: r[1], p: r[2], d: r[3], x: r[4] || "" }));
+
+/* Fallbeispiele: t Themenfeld, a = Indizes der richtigen Optionen */
+const CASES = [
+{t:"s",place:"Barcelona, Spanien",title:"Superilles",text:"In Barcelona werden nach einem Planungsmodell jeweils 3 × 3 Häuserblocks zu einer Einheit zusammengefasst. Autos fahren nur noch auf den Außenstraßen; auf den Kreuzungen im Inneren stehen Bänke, Bäume und Spielgeräte.",q:"Welcher Fachbegriff beschreibt dieses Konzept?",opts:["Superblock","Parking Day","Multimodal-Straße","Fahrradquartier"],a:[0],why:"Beim Superblock werden mehrere Blocks zusammengefasst und der Durchgangsverkehr außen herumgeführt. Ein Parking Day ist nur eine eintägige Aktion."},
+{t:"s",place:"Hamburg",title:"HafenCity",text:"Auf ehemaligen Hafen- und Lagerflächen südlich der Innenstadt entsteht seit 2001 ein Stadtteil mit Wohnungen, Büros, der Elbphilharmonie und Uferpromenaden. Grundlage ist ein Gesamtkonzept aus dem Jahr 2000, das später überarbeitet wurde.",q:"Welche zwei Begriffe treffen zu?",opts:["Waterfront Development","Masterplan","Suburbanisierung","Grüne Wiese"],a:[0,1],why:"Die Umgestaltung brachgefallener Hafenflächen ist Waterfront Development; das zugrunde liegende, rechtlich nicht verbindliche Gesamtkonzept ist ein Masterplan."},
+{t:"s",place:"Kiel-Holtenau",title:"Ein Fliegerhorst wird Stadtteil",text:"Auf dem Gelände des ehemaligen Marinefliegergeschwaders 5 in Kiel-Holtenau entsteht ein neues Wohn- und Gewerbequartier.",q:"Wie nennt man die Umnutzung einer solchen Fläche?",opts:["Konversion","Suburbanisierung","Gentrifizierung","Landverbrauch"],a:[0],why:"Konversion bezeichnet die Umwandlung früher militärisch genutzter Flächen für eine zivile Nutzung."},
+{t:"s",place:"Innenstadtnahes Altbauviertel",title:"Vom Arbeiterviertel zum Szenequartier",text:"Ein gründerzeitliches Arbeiterviertel nahe der Innenstadt wird saniert. Cafés und Galerien eröffnen, erst ziehen Studierende, dann gutverdienende Familien zu. Die Mieten steigen in zehn Jahren um 60 %; viele Alteingesessene ziehen weg.",q:"Welcher Prozess läuft hier ab?",opts:["Gentrifizierung","Suburbanisierung","Revitalisierung","Eventifizierung"],a:[0],why:"Kennzeichen der Gentrifizierung sind Aufwertung, Zuzug einkommensstärkerer Gruppen und Verdrängung. Revitalisierung meint die Wiederbelebung von Brachen, ohne dass Verdrängung im Mittelpunkt steht."},
+{t:"s",place:"Umland einer Großstadt",title:"Einfamilienhaus und Fachmarkt",text:"Junge Familien aus der Kernstadt bauen Einfamilienhäuser in den Umlandgemeinden. An der Autobahnabfahrt eröffnen ein Möbelhaus und ein Fachmarktzentrum auf bisherigem Ackerland.",q:"Welche zwei Begriffe beschreiben diese Entwicklung?",opts:["Suburbanisierung","Grüne Wiese","Gentrifizierung","Konversion"],a:[0,1],why:"Die Abwanderung von Bevölkerung und Handel ins Umland ist Suburbanisierung; Einzelhandel auf bisher unbebauten Flächen am Stadtrand nennt man Ansiedlung auf der grünen Wiese."},
+{t:"w",place:"Lausitz",title:"Nach der Kohle",text:"Bis spätestens 2038 soll in der Lausitz die Braunkohleverstromung enden. Tausende Arbeitsplätze in Tagebauen und Kraftwerken fallen weg; Bund und Länder fördern Forschungsinstitute, Verkehrsprojekte und Unternehmensansiedlungen.",q:"Welche zwei Begriffe treffen zu?",opts:["Strukturwandel","Transformationsprozess","Deregulierung","Konversion"],a:[0,1],why:"Die Wirtschaftsstruktur ändert sich dauerhaft (Strukturwandel); der gesteuerte gesellschaftliche und wirtschaftliche Umbau ist ein Transformationsprozess."},
+{t:"k",place:"Weltmeere",title:"Steigende Pegel",text:"Der globale Meeresspiegel steigt derzeit um rund 4 mm pro Jahr. Ursachen sind das Abschmelzen von Gletschern und des grönländischen Eisschilds sowie die Erwärmung der Ozeane.",q:"Welche zwei Arten des Anstiegs sind beteiligt?",opts:["eustatischer Anstieg","thermosterischer Anstieg","Albedo","Thermohaline Zirkulation"],a:[0,1],why:"Schmelzwasser vom Land erhöht die Wassermenge (eustatisch); wärmeres Wasser dehnt sich aus (thermosterisch)."},
+{t:"k",place:"Arktischer Ozean",title:"Dunkles Wasser statt Eis",text:"Im September 2012 erreichte die Fläche des arktischen Meereises einen Tiefststand. Wo vorher helles Eis lag, liegt nun dunkles Wasser, und die Region erwärmt sich dadurch zusätzlich.",q:"Welcher Begriff erklärt die zusätzliche Erwärmung?",opts:["Albedo","Treibhausgas","Jetstream","eustatischer Anstieg"],a:[0],why:"Wasser hat eine viel geringere Albedo als Eis und nimmt mehr Strahlung auf (Eis-Albedo-Rückkopplung). Schmelzendes Meereis lässt den Meeresspiegel übrigens nicht steigen."},
+{t:"k",place:"Jakutien, Sibirien",title:"Batagaika-Krater",text:"Im Nordosten Sibiriens wächst der Batagaika-Krater jedes Jahr. Der Boden taut, bricht ein und setzt Kohlenstoff frei, der seit Jahrtausenden gefroren war.",q:"Welche zwei Begriffe treffen zu?",opts:["Permafrost","Kipppunkt (Kippelement)","Monokultur","Albedo"],a:[0,1],why:"Tauender Permafrost setzt CO₂ und Methan frei, was die Erwärmung weiter verstärkt; er gilt deshalb als Kippelement."},
+{t:"k",place:"British Columbia, Kanada",title:"49,6 °C in Lytton",text:"Ende Juni 2021 lag ein Hochdruckgebiet tagelang über dem Nordwesten Nordamerikas; in Lytton wurden 49,6 °C gemessen, ein Landesrekord. Die Höhenströmung bildete eine stark ausgeprägte Welle und kam kaum voran.",q:"Welche zwei Begriffe helfen bei der Erklärung?",opts:["Jetstream","Wetterextrem","Thermohaline Zirkulation","Klima"],a:[0,1],why:"Ein stark mäandrierender Jetstream hält Hochdrucklagen fest; die Rekordhitze ist ein Wetterextrem. Klima beschreibt dagegen den langjährigen Durchschnitt."},
+{t:"w",place:"Indien – China – Bangladesch – Deutschland",title:"Die Reise einer Jeans",text:"Die Baumwolle für eine Jeans stammt aus Indien, der Stoff wird in China gefärbt, eine Zulieferfabrik in Bangladesch näht sie, verkauft wird sie in Deutschland. Das europäische Modeunternehmen entwirft und vermarktet nur.",q:"Welche zwei Begriffe treffen zu?",opts:["Wertschöpfungskette","Outsourcing","Subsistenzwirtschaft","Sonderwirtschaftszone"],a:[0,1],why:"Die Stufen vom Rohstoff bis zum Verkauf bilden eine globale Wertschöpfungskette; die Fertigung ist an Zulieferer ausgelagert (Outsourcing)."},
+{t:"e",place:"Côte d’Ivoire",title:"Kakao für den Weltmarkt",text:"Côte d’Ivoire ist der größte Kakaoproduzent der Welt. Viele Kleinbauern bauen fast ausschließlich Kakao für den Export an und kaufen Grundnahrungsmittel hinzu.",q:"Welcher Begriff passt zum Kakao?",opts:["Cash Crops","Food Crops","Flex Crops","Subsistenzwirtschaft"],a:[0],why:"Kakao wird für den Verkauf und Export angebaut, um Einkommen zu erzielen."},
+{t:"e",place:"USA",title:"Mais im Tank",text:"Ein großer Teil des in den USA geernteten Maises wird zu Bioethanol verarbeitet. Steigen die Lebensmittelpreise, fließt mehr Mais in Nahrung und Tierfutter.",q:"Welcher Begriff beschreibt die wechselnde Verwendung am besten?",opts:["Flex Crops","Cash Crops","Food Crops","Monokultur"],a:[0],why:"Flex Crops werden je nach Preis flexibel als Nahrung, Futter oder Treibstoff genutzt."},
+{t:"e",place:"Gambella, Äthiopien",title:"Land für Investoren",text:"In der Region Gambella verpachtete der äthiopische Staat ab 2008 Hunderttausende Hektar an in- und ausländische Investoren für Reis-, Zuckerrohr- und Palmölplantagen. Teile der lokalen Bevölkerung wurden umgesiedelt.",q:"Welcher Begriff beschreibt diesen Vorgang?",opts:["Landgrabbing","Konversion","Agroforstwirtschaft","Kohäsionspolitik"],a:[0],why:"Großflächige Landnahme durch Investoren, meist für Exportproduktion, auf Kosten der lokalen Bevölkerung ist Landgrabbing."},
+{t:"e",place:"Bangladesch",title:"Eine Nähmaschine auf Kredit",text:"Muhammad Yunus gründete eine Bank, die Gruppen von Frauen Kredite von oft unter 100 US-Dollar gibt, etwa für eine Nähmaschine oder ein paar Hühner.",q:"Welcher Begriff ist gemeint?",opts:["Mikrokredit","Ausländische Direktinvestition (ADI)","Big Push","Informelle Zahlung"],a:[0],why:"Sehr kleine Kredite an Menschen ohne Zugang zu normalen Banken heißen Mikrokredite (Grameen Bank)."},
+{t:"e",place:"Shenzhen, China",title:"Vom Fischerort zur Megastadt",text:"1980 war Shenzhen eine Kleinstadt an der Grenze zu Hongkong. Der Staat gewährte dort ausländischen Firmen Steuervorteile und Zollfreiheit. Heute leben in Shenzhen über 17 Millionen Menschen.",q:"Welche zwei Begriffe treffen zu?",opts:["Sonderwirtschaftszone","Ausländische Direktinvestition (ADI)","Freihandelszone","Konversion"],a:[0,1],why:"Shenzhen war die erste chinesische Sonderwirtschaftszone und zog massiv ausländische Direktinvestitionen an. Eine Freihandelszone ist dagegen ein Zusammenschluss mehrerer Staaten."},
+{t:"b",place:"Südkorea",title:"Weniger Kinder, mehr Wachstum",text:"In Südkorea sank die Zahl der Kinder pro Frau von etwa 6 (1960) auf unter 2 (Mitte der 1980er-Jahre). In den folgenden Jahrzehnten war der Anteil der 15- bis 64-Jährigen sehr hoch; gleichzeitig investierte das Land massiv in Bildung.",q:"Welcher Begriff beschreibt den wirtschaftlichen Vorteil aus dieser Altersstruktur?",opts:["Demografische Dividende","Tragfähigkeit","Brain Gain","Trickle-down-Effekt"],a:[0],why:"Viele Erwerbsfähige und wenige zu versorgende Kinder und Alte ermöglichen mehr Produktion, Sparen und Investitionen."},
+{t:"w",place:"Hamburger Hafen",title:"Umschlag am Containerterminal",text:"Ein 400 m langes Containerschiff aus Asien wird in Hamburg entladen. Ein Teil der Container fährt mit kleineren Schiffen weiter nach Danzig und Helsinki, ein großer Teil per Güterzug nach Süddeutschland und Tschechien.",q:"Welche zwei Begriffe treffen zu?",opts:["Feeder","Hinterlandanbindung","Massengut","Tiefwasserhafen"],a:[0,1],why:"Die kleineren Zubringerschiffe sind Feeder; der Weitertransport ins Binnenland läuft über die Hinterlandanbindung. Hamburg ist wegen der Elbe kein Tiefwasserhafen."},
+{t:"w",place:"Shanghai – Rotterdam – Duisburg – Kassel",title:"Fahrradteile auf Reisen",text:"Ein Container mit Fahrradteilen fährt per Schiff von Shanghai nach Rotterdam, per Binnenschiff nach Duisburg und per Lkw nach Kassel. Geöffnet wird er erst beim Empfänger.",q:"Welcher Begriff beschreibt diesen Transport?",opts:["Intermodale Transportkette","Massengut","Outsourcing","Feeder"],a:[0],why:"Mehrere Verkehrsträger, aber nur die Ladeeinheit wechselt das Verkehrsmittel: eine intermodale Transportkette."},
+{t:"b",place:"Ghana – Großbritannien",title:"Ärztinnen wandern aus",text:"Ghana bildet Ärztinnen und Pflegekräfte mit staatlichen Mitteln aus. Viele wandern nach Großbritannien aus, wo sie besser bezahlt werden und den Personalmangel im Gesundheitsdienst lindern.",q:"Welche zwei Begriffe beschreiben die Folgen für beide Länder?",opts:["Brain Drain","Brain Gain","Binnenmigration","Pushback"],a:[0,1],why:"Ghana verliert Fachkräfte (Brain Drain), Großbritannien gewinnt sie (Brain Gain)."},
+{t:"b",place:"Senegal – Spanien",title:"Dürre und ein Anruf aus Almería",text:"Ein Landwirt im Senegal verliert nach mehreren Dürrejahren seine Ernte. Sein Cousin in Spanien berichtet von Arbeit in den Gewächshäusern bei Almería.",q:"Welche Zuordnung ist richtig?",opts:["Dürre = Push-Faktor, Arbeit in Almería = Pull-Faktor","Dürre = Pull-Faktor, Arbeit in Almería = Push-Faktor","Beides sind Push-Faktoren","Beides sind Pull-Faktoren"],a:[0],why:"Die Dürre drängt aus dem Herkunftsgebiet (Push), Arbeit und Kontakte ziehen ins Zielgebiet (Pull)."},
+{t:"b",place:"Sahelzone",title:"Kahle Weiden am Brunnen",text:"In einem Dorf im Sahel hat sich die Zahl der Rinder und Ziegen in 20 Jahren verdoppelt. Die Weiden rund um den Brunnen sind kahl, der Boden verweht, die Erträge sinken.",q:"Welche Grenze wird hier überschritten?",opts:["Tragfähigkeit","Demografische Dividende","Subsistenzwirtschaft","Disparität"],a:[0],why:"Die Nutzung übersteigt, was der Raum dauerhaft leisten kann; die Tragfähigkeit ist überschritten."},
+{t:"n",place:"Privathaushalt",title:"Licht, das nichts mehr kostet",text:"Eine Familie ersetzt alle Glühbirnen durch LED-Lampen. Weil Licht jetzt kaum noch kostet, bleiben Außenbeleuchtung und Lichterketten im Garten die ganze Nacht an.",q:"Welcher Effekt tritt hier auf?",opts:["Rebound-Effekt","Greenwashing","Multiplikatoreffekt","Synergieeffekt"],a:[0],why:"Die Effizienzgewinne werden durch höheren Verbrauch teilweise aufgezehrt."},
+{t:"n",place:"Venedig, Italien",title:"Eintritt für die Altstadt",text:"An Spitzentagen besuchen mehr Tagesgäste Venedig, als die Altstadt Einwohner hat. Seit 2024 erhebt die Stadt an bestimmten Tagen eine Gebühr für Tagesbesucher.",q:"Welches Problem soll die Gebühr eindämmen?",opts:["Overtourismus","Nachhaltiger Tourismus","Eventifizierung","Placelessness"],a:[0],why:"Zu viele Besucher belasten Infrastruktur und Lebensqualität der Einheimischen: Overtourismus."},
+{t:"n",place:"Luftverkehr",title:"„Klimaneutral“ fliegen",text:"Eine Fluggesellschaft wirbt mit „klimaneutralem Fliegen“, weil Fluggäste gegen Aufpreis Waldschutzprojekte unterstützen können. Die eigenen Emissionen der Airline steigen weiter.",q:"Welcher Begriff passt zu dieser Werbung?",opts:["Greenwashing","Corporate Social Responsibility (CSR)","Rebound-Effekt","Gütesiegel"],a:[0],why:"Ein grünes Image ohne grundlegende Verbesserung der eigenen Umweltbilanz ist Greenwashing."},
+{t:"e",place:"London",title:"Die City und Canary Wharf",text:"In der Londoner City und in Canary Wharf sitzen Hunderte Banken, Versicherungen und Immobilienfirmen. Von hier aus werden Kapitalströme und Konzerne weltweit gesteuert.",q:"Welche zwei Begriffe treffen zu?",opts:["FIRE-Zentrum","Command-and-Control-Funktion","Sonderwirtschaftszone","Triade"],a:[0,1],why:"Finance, Insurance und Real Estate bilden das FIRE-Zentrum; die weltweite Steuerung ist die Command-and-Control-Funktion einer Global City."},
+{t:"w",place:"Kiel und Hamburg",title:"Maritime Wirtschaft",text:"Rund um Kiel und Hamburg arbeiten Werften, Zulieferer, Reedereien, Hochschulen und Forschungsinstitute für Schiffbau und Meerestechnik eng zusammen.",q:"Welcher Begriff beschreibt diese Struktur?",opts:["Cluster","Inkubator","Triade","Freihandelszone"],a:[0],why:"Eine räumliche Konzentration von Unternehmen einer Branche mit Forschung und Zulieferern, die kooperieren, ist ein Cluster."},
+{t:"k",place:"Landwirtschaft",title:"Kuh gegen Auto",text:"Ein Rind stößt pro Jahr rund 100 kg Methan aus. Um das mit den Emissionen von Autofahrten zu vergleichen, wird der Ausstoß in Tonnen CO₂ umgerechnet.",q:"Welche Maßeinheit macht den Vergleich möglich?",opts:["CO₂-Äquivalent (CO₂e)","CO₂-Fußabdruck","Virtuelles Wasser","Treibhausgas"],a:[0],why:"Das CO₂-Äquivalent rechnet die Klimawirkung verschiedener Gase in CO₂ um."},
+{t:"n",place:"Chile – Brasilien – Deutschland",title:"Wasser im Einkaufskorb",text:"Deutschland importiert Avocados aus Chile und Rindfleisch aus Brasilien. In beiden Produkten steckt Wasser, das in den Anbauländern verbraucht wurde.",q:"Welcher Begriff ist gemeint?",opts:["Virtuelles Wasser","Wasserknappheit","Sicheres Trinkwasser","Externalisierte Kosten"],a:[0],why:"Das bei der Herstellung verbrauchte Wasser heißt virtuelles Wasser; mit dem Import wird es gewissermaßen mitgehandelt."},
+{t:"k",place:"Schleswig-Holstein",title:"Klimadeich und Windpark",text:"Schleswig-Holstein verstärkt seine Landesschutzdeiche zu Klimadeichen, die sich später weiter erhöhen lassen. Gleichzeitig baut das Land Windparks aus.",q:"Welche Zuordnung ist richtig?",opts:["Deich = Adaptation, Windparks = Mitigation","Deich = Mitigation, Windparks = Adaptation","Beides ist Mitigation","Beides ist Adaptation"],a:[0],why:"Der Deich passt sich an die Folgen an (Adaptation); Windstrom senkt Emissionen und bekämpft die Ursache (Mitigation)."},
+{t:"s",place:"Ostseeküste",title:"Ein Windpark vor der Küste",text:"Vor der Ostseeküste soll ein Offshore-Windpark entstehen. Fischer fürchten um ihre Fanggründe, Naturschützer um die Schweinswale, Tourismusbetriebe um den freien Blick.",q:"Welcher Begriff beschreibt diese Situation?",opts:["Raumnutzungskonflikt","Disparität","Placelessness","Top-down-Ansatz"],a:[0],why:"Verschiedene Akteure wollen denselben Raum unterschiedlich nutzen: ein Raumnutzungskonflikt."},
+{t:"s",place:"Kieler Stadtteil",title:"Ein Garten auf der Brache",text:"Anwohnerinnen sammeln Unterschriften und legen auf einer Brachfläche selbst einen Gemeinschaftsgarten an. Erst später unterstützt die Stadt das Projekt.",q:"Welcher Begriff passt?",opts:["Bottom-up-Ansatz","Top-down-Ansatz","Masterplan","Konversion"],a:[0],why:"Die Initiative geht von den Bewohnern aus und wirkt von unten nach oben."},
+{t:"s",place:"Kopenhagen, Dänemark",title:"Radhauptstadt",text:"In Kopenhagen wird fast die Hälfte aller Wege zur Arbeit oder Ausbildung mit dem Rad zurückgelegt.",q:"Mit welcher Kennzahl wird die Verkehrsmittelwahl angegeben?",opts:["Modal Split","Erreichbarkeit","Motorisierter Individualverkehr (MIV)","Knotenpunkt"],a:[0],why:"Der Modal Split gibt die Anteile der Verkehrsmittel am Verkehrsaufkommen an."},
+{t:"e",place:"Indien",title:"Bengaluru und Bihar",text:"In Bengaluru boomt die IT-Branche mit Hunderttausenden gut bezahlten Jobs. Viele ländliche Regionen im Bundesstaat Bihar profitieren davon kaum.",q:"Welcher Begriff beschreibt dieses räumliche Muster?",opts:["Fragmentierung","Trickle-down-Effekt","Triade","Big Push"],a:[0],why:"Nur einzelne Inseln profitieren von der Globalisierung, andere Räume bleiben abgekoppelt. Ein Trickle-down-Effekt würde ein Durchsickern des Wohlstands erwarten lassen."},
+{t:"e",place:"Rohstoffexportland",title:"Warum ist das Land arm?",text:"Eine Studie erklärt die Armut eines Landes mit seiner kolonialen Ausrichtung auf Rohstoffexporte und mit langfristig sinkenden Weltmarktpreisen für diese Rohstoffe im Vergleich zu Industriegütern.",q:"Auf welche Theorie stützt sich die Studie?",opts:["Dependenztheorie","Modernisierungstheorie","Big Push","Trickle-down-Effekt"],a:[0],why:"Exogene Ursachen, Abhängigkeit und ungünstige Terms of Trade sind die Argumente der Dependenztheorie."},
+{t:"k",place:"Station X, 13° N",title:"Ein Klimadiagramm",svg:"klima",text:"Das Klimadiagramm zeigt eine Station mit 570 mm Jahresniederschlag und einer Jahresmitteltemperatur von 29,7 °C.",q:"Zu welchem Raum passt das Diagramm?",opts:["Sahelzone","Tropischer Regenwald","Mittelmeerraum","Tundra"],a:[0],why:"Ganzjährig hohe Temperaturen, nur eine kurze Regenzeit im Sommer (Juni–September) und gut 500 mm Niederschlag: typisch für den Sahel. Die Station ist Niamey (Niger)."},
+{t:"k",place:"Schema",title:"Strahlung in der Atmosphäre",svg:"treibhaus",text:"Das Schema zeigt vier Strahlungspfeile zwischen Sonne, Atmosphäre und Erdoberfläche.",q:"Welcher Pfeil zeigt die atmosphärische Gegenstrahlung?",opts:["Pfeil A","Pfeil B","Pfeil C","Pfeil D"],a:[3],why:"A ist einfallende kurzwellige Strahlung, B reflektierte Strahlung, C langwellige Ausstrahlung der Oberfläche, D die von den Treibhausgasen zur Erde zurückgestrahlte Wärme (Gegenstrahlung)."},
+{t:"b",place:"Modell",title:"Zwei Linien, fünf Phasen",svg:"demo",text:"Das Diagramm zeigt die Geburten- und Sterberate im Modell des demografischen Übergangs (in ‰).",q:"Welche Aussage trifft zu?",opts:["Linie 1 ist die Geburtenrate; die Bevölkerung wächst am stärksten, wo der Abstand der Linien am größten ist.","Linie 1 ist die Sterberate; sie sinkt im Modell erst nach der Geburtenrate.","Linie 2 ist die Geburtenrate; in Phase 5 liegt sie deutlich über der Sterberate.","Beide Linien sinken gleichzeitig, deshalb wächst die Bevölkerung in Phase 2 kaum."],a:[0],why:"Im Modell sinkt zuerst die Sterberate (Linie 2), die Geburtenrate (Linie 1) folgt verzögert. Der Abstand zwischen beiden ist das natürliche Bevölkerungswachstum."},
+{t:"e",place:"Land A und Land B",title:"Zwei Lorenzkurven",svg:"lorenz",text:"Die Lorenzkurve zeigt, welcher Anteil des Einkommens auf welchen Anteil der Bevölkerung entfällt. Die Diagonale steht für völlige Gleichverteilung.",q:"Welches Land hat den höheren Gini-Koeffizienten?",opts:["Land B","Land A","Beide gleich","Nicht ablesbar"],a:[0],why:"Je weiter die Kurve unter der Diagonale liegt, desto größer die Fläche dazwischen und desto höher der Gini-Koeffizient."},
+{t:"s",place:"Modell nach Christaller",title:"Ein System zentraler Orte",svg:"zentral",text:"Der Ort in der Mitte versorgt das ganze Gebiet auch mit einer Universität und Fachkliniken; die sechs mittleren Orte bieten Fachgeschäfte und Gymnasien, die kleinen Orte Supermarkt und Grundschule.",q:"Wie wird der Ort in der Mitte eingestuft, und warum?",opts:["Oberzentrum, weil er den größten Bedeutungsüberschuss hat","Mittelzentrum, weil er die meisten Einwohner hat","Grundzentrum, weil er den täglichen Bedarf deckt","Stadtrandkern, weil er am Rand eines Oberzentrums liegt"],a:[0],why:"Entscheidend ist der Bedeutungsüberschuss, also die Versorgung des Umlands über den eigenen Bedarf hinaus. Das Oberzentrum deckt zusätzlich den spezialisierten Bedarf."}
+];
+
+/* ---------- reine Hilfsfunktionen ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function shortDef(d){
+  const p = d.replace(/\b([A-Za-zÄÖÜäöü])\. /g, "$1§ ").replace(/(ca|bzw|Mio|vs)\. /g, "$1§ ");
+  const m = p.match(/^(.+?[a-zäöüß0-9)“%])\.\s+(?=[A-ZÄÖÜ„])/);
+  return (m ? m[1] + "." : p).replace(/§/g, ".");
+}
+function coreNames(t){
+  const m = t.name.match(/^(.*?)\s*\((.*)\)\s*$/);
+  return m ? [m[1], m[2]] : [t.name];
+}
+function maskDef(t, text){
+  let s = text;
+  coreNames(t).forEach(n => {
+    if(n.length < 3) return;
+    const re = new RegExp(n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+    s = s.replace(re, "▢▢▢");
+  });
+  return s;
+}
+const norm = s => s.toLowerCase().replace(/₂/g,"2").replace(/₄/g,"4").replace(/ß/g,"ss").replace(/[^a-z0-9äöü]/g,"");
+function lev(a,b){
+  const m=a.length,n=b.length; if(!m) return n; if(!n) return m;
+  let prev=Array.from({length:n+1},(_,j)=>j);
+  for(let i=1;i<=m;i++){ const cur=[i]; for(let j=1;j<=n;j++){ cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1)); } prev=cur; }
+  return prev[n];
+}
+function checkWritten(t, input){
+  const x = norm(input); if(!x) return false;
+  return coreNames(t).map(norm).some(c => { const tol = c.length<=5?0:(c.length<=11?1:2); return lev(x,c) <= tol; });
+}
+function punkte(p){ const th=[95,90,85,80,75,70,65,60,55,50,45,40,33,27,20]; for(let i=0;i<th.length;i++) if(p>=th[i]) return 15-i; return 0; }
+/* ---------- Zustand ---------- */
+const KEY = "geo-begriffstrainer-v1";
+let S = { box:{}, sel:[], name:"", dir:"t2d", best:null, tcount:20, tmode:"mix" };
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (s) S = Object.assign(S, s); } catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
+const box = n => S.box[n] || 0;
+function setBox(n, v){ S.box[n] = Math.max(0, Math.min(3, v)); save(); }
+function know(t){ setBox(t.name, box(t.name) === 0 ? 2 : box(t.name) + 1); }
+function miss(t){ setBox(t.name, 1); }
+
+const ROUTES = ["start","karten","zuordnen","test","anwenden","glossar"];
+let cur = "start", timer = null;
+let C = null, M = null, T = null, A = null, G = { q:"" };
+const $ = id => document.getElementById(id);
+const view = () => $("view");
+const tc = k => `var(--c-${k})`;
+const inSel = k => !S.sel.length || S.sel.includes(k);
+const pool = () => TERMS.filter(t => inSel(t.t));
+const selLabel = () => S.sel.length ? S.sel.map(k => TOPICS[k]).join(", ") : "alle Themenfelder";
+
+/* ---------- Navigation ---------- */
+function route(){
+  const h = location.hash.slice(1);
+  cur = ROUTES.includes(h) ? h : "start";
+  clearInterval(timer);
+  render();
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+
+function render(){
+  document.querySelectorAll(".tab").forEach(a => a.setAttribute("aria-current", a.dataset.r === cur ? "page" : "false"));
+  renderChips();
+  ({ start:vStart, karten:vCards, zuordnen:vMatch, test:vTest, anwenden:vApply, glossar:vGloss })[cur]();
+}
+
+function renderChips(){
+  const el = $("chips");
+  let h = `<button class="chip" data-k="" aria-pressed="${!S.sel.length}">Alle Themen</button>`;
+  for (const k in TOPICS) h += `<button class="chip" data-k="${k}" aria-pressed="${S.sel.includes(k)}"><span class="dot" style="background:${tc(k)}"></span>${esc(TOPICS[k])}</button>`;
+  el.innerHTML = h;
+  el.querySelectorAll(".chip").forEach(b => b.onclick = () => {
+    const k = b.dataset.k;
+    if (!k) S.sel = [];
+    else S.sel = S.sel.includes(k) ? S.sel.filter(x => x !== k) : S.sel.concat(k);
+    if (S.sel.length === Object.keys(TOPICS).length) S.sel = [];
+    save(); C = M = A = T = null;
+    render();
+  });
+}
+
+/* ---------- Start ---------- */
+function vStart(){
+  const all = TERMS.length;
+  const sure = TERMS.filter(t => box(t.name) === 3).length;
+  const learn = TERMS.filter(t => box(t.name) === 1 || box(t.name) === 2).length;
+  const neu = all - sure - learn;
+  let topics = "";
+  for (const k in TOPICS) {
+    const ts = TERMS.filter(t => t.t === k), s = ts.filter(t => box(t.name) === 3).length;
+    topics += `<button class="topic" data-k="${k}">
+      <span class="nm"><span class="dot" style="background:${tc(k)}"></span>${esc(TOPICS[k])}</span>
+      <span class="ct">${s}/${ts.length}</span>
+      <span class="bar"><i style="width:${ts.length ? s/ts.length*100 : 0}%;background:${tc(k)}"></i></span></button>`;
+  }
+  view().innerHTML = `
+  <section class="hero"><h1>Fachbegriffe fürs Abitur</h1>
+    <p>${all} Begriffe aus Glossar und Buch, ${CASES.length} Fallbeispiele zum Anwenden.</p></section>
+  <section class="panel">
+    <div class="stat"><b>${sure}</b><span>von ${all} sicher</span></div>
+    <div class="stack" aria-hidden="true"><i style="width:${sure/all*100}%;background:var(--ok)"></i><i style="width:${learn/all*100}%;background:var(--ochre)"></i></div>
+    <div class="legend"><span><span class="dot" style="background:var(--ok)"></span>sicher ${sure}</span><span><span class="dot" style="background:var(--ochre)"></span>in Arbeit ${learn}</span><span><span class="dot" style="background:var(--line)"></span>neu ${neu}</span></div>
+  </section>
+  <section class="modes">
+    <a class="mode" href="#karten"><b>Karteikarten</b><small>Umdrehen, einschätzen, schwierige Karten kommen öfter.</small></a>
+    <a class="mode" href="#zuordnen"><b>Zuordnen</b><small>Sechs Begriffe, sechs Erklärungen, gegen die Uhr.</small></a>
+    <a class="mode" href="#test"><b>Test</b><small>Multiple Choice und Begriffe schreiben, mit Punkten.</small></a>
+    <a class="mode" href="#anwenden"><b>Anwenden</b><small>Raumbeispiele und Grafiken: Welcher Begriff passt?</small></a>
+  </section>
+  <section class="panel"><div class="spread" style="margin-bottom:6px"><h2 style="font-size:20px">Themenfelder</h2><span class="note">Tippen = nur dieses Thema üben</span></div>
+    <div class="topic-list">${topics}</div></section>
+  <section class="note" id="resetbox">Dein Lernstand wird nur in diesem Browser auf diesem Gerät gespeichert, es werden keine Daten übertragen.
+    <button class="linkbtn" id="reset">Lernstand zurücksetzen</button></section>`;
+  view().querySelectorAll(".topic").forEach(b => b.onclick = () => { S.sel = [b.dataset.k]; save(); C = M = A = T = null; location.hash = "karten"; });
+  $("reset").onclick = () => {
+    $("resetbox").innerHTML = `Wirklich alle Fortschritte löschen? <span class="row" style="margin-top:8px"><button class="btn warn small" id="r-yes">Ja, zurücksetzen</button><button class="btn ghost small" id="r-no">Abbrechen</button></span>`;
+    $("r-yes").onclick = () => { S.box = {}; S.best = null; save(); render(); };
+    $("r-no").onclick = render;
+  };
+}
+
+/* ---------- Karteikarten ---------- */
+function initCards(list){
+  const q = list || shuffle(pool()).sort((a,b) => box(a.name) - box(b.name)).slice(0, 20);
+  C = { q, i:0, flip:false, ok:0, bad:0, again:[] };
+}
+function boxes(t){ const b = box(t.name); return `<span class="boxes" title="Lernstand">${[1,2,3].map(i => `<i class="${b >= i ? "on" : ""}"></i>`).join("")}</span>`; }
+function topicTag(t){ return `<span class="mono" style="display:inline-flex;gap:6px;align-items:center"><span class="dot" style="background:${tc(t.t)}"></span>${esc(TOPICS[t.t])}${t.p ? " · Buch S. " + t.p : ""}</span>`; }
+
+function vCards(){
+  if (!C) initCards();
+  if (!C.q.length) { view().innerHTML = `<div class="panel">Für diese Auswahl gibt es keine Begriffe.</div>`; return; }
+  if (C.i >= C.q.length) {
+    view().innerHTML = `<section class="panel" style="display:grid;gap:12px">
+      <h2 style="font-size:26px">Runde geschafft</h2>
+      <p style="margin:0">${C.ok} gewusst, ${C.bad} noch üben.</p>
+      <div class="row">${C.again.length ? `<button class="btn" id="again">${C.again.length} schwierige Karten wiederholen</button>` : ""}
+      <button class="btn ${C.again.length ? "ghost" : ""}" id="next">Neue Runde</button></div></section>`;
+    if ($("again")) $("again").onclick = () => { initCards(shuffle(C.again)); vCards(); };
+    $("next").onclick = () => { initCards(); vCards(); };
+    return;
+  }
+  const t = C.q[C.i], d2t = S.dir === "d2t";
+  let front, back;
+  if (!d2t) {
+    front = `<div class="term">${esc(t.name)}</div><div class="hint">Tippen zum Umdrehen</div>`;
+    back = `<div class="term" style="font-size:22px">${esc(t.name)}</div><div class="def">${esc(t.d)}</div>${t.x ? `<div class="ex">z. B. ${esc(t.x)}</div>` : ""}`;
+  } else {
+    front = `<div class="def">${esc(maskDef(t, t.d))}</div><div class="hint">Welcher Begriff ist gemeint? Tippen zum Umdrehen</div>`;
+    back = `<div class="term">${esc(t.name)}</div><div class="def" style="font-size:16px">${esc(t.d)}</div>${t.x ? `<div class="ex">z. B. ${esc(t.x)}</div>` : ""}`;
+  }
+  view().innerHTML = `
+  <div class="seg dirseg" role="group" aria-label="Richtung"><button data-d="t2d" aria-pressed="${!d2t}">Begriff → Erklärung</button><button data-d="d2t" aria-pressed="${d2t}">Erklärung → Begriff</button></div>
+  <span class="clock">Karte ${C.i + 1} von ${C.q.length}</span>
+  <div class="progress"><i style="width:${C.i / C.q.length * 100}%"></i></div>
+  <button class="flash ${C.flip ? "back" : ""}" id="flip" aria-live="polite">
+    <div class="meta">${topicTag(t)}${boxes(t)}</div>${C.flip ? back : front}</button>
+  ${C.flip ? `<div class="answer-row"><button class="btn no" id="no">Noch üben</button><button class="btn yes" id="yes">Kann ich</button></div>` : `<p class="note" style="margin:0">Tipp: Erst selbst erklären, dann umdrehen. Leertaste dreht, ← noch üben, → kann ich.</p>`}`;
+  $("flip").onclick = () => { C.flip = !C.flip; vCards(); };
+  view().querySelectorAll(".seg button").forEach(b => b.onclick = () => { S.dir = b.dataset.d; save(); C.flip = false; vCards(); });
+  if (C.flip) {
+    $("yes").onclick = () => { know(t); C.ok++; C.i++; C.flip = false; vCards(); };
+    $("no").onclick = () => { miss(t); C.bad++; C.again.push(t); C.i++; C.flip = false; vCards(); };
+  }
+}
+
+/* ---------- Zuordnen ---------- */
+function initMatch(){
+  const p = shuffle(pool()).slice(0, 6);
+  M = { items:p, terms:shuffle(p), defs:shuffle(p), selT:null, selD:null, done:new Set(), err:0, t0:Date.now(), end:null };
+}
+const fmtTime = ms => { const s = Math.floor(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
+function vMatch(){
+  if (!M) initMatch();
+  if (M.items.length < 2) { view().innerHTML = `<div class="panel">Für diese Auswahl gibt es zu wenige Begriffe.</div>`; return; }
+  if (M.end) {
+    const ms = M.end - M.t0, isBest = S.best === ms;
+    view().innerHTML = `<section class="panel" style="display:grid;gap:12px">
+      <h2 style="font-size:26px">Alle ${M.items.length} zugeordnet</h2>
+      <p style="margin:0">Zeit <b class="clock">${fmtTime(ms)}</b> · ${M.err} Fehlversuche${isBest ? " · neue Bestzeit" : (S.best ? ` · Bestzeit ${fmtTime(S.best)}` : "")}</p>
+      <div><button class="btn" id="next">Neue Runde</button></div></section>`;
+    $("next").onclick = () => { initMatch(); vMatch(); };
+    return;
+  }
+  view().innerHTML = `
+  <div class="spread"><span class="note">Tippe einen Begriff und dann die passende Erklärung.</span><span class="clock" id="clock">0:00</span></div>
+  <div class="pool">${M.terms.map(t => `<button class="tchip ${M.done.has(t.id) ? "done" : ""}" data-id="${t.id}" aria-pressed="${M.selT === t.id}">${esc(t.name)}</button>`).join("")}</div>
+  <div class="dlist">${M.defs.map(t => M.done.has(t.id)
+      ? `<div class="dcard done"><b>${esc(t.name)}</b>${esc(shortDef(t.d))}</div>`
+      : `<button class="dcard" data-id="${t.id}" aria-pressed="${M.selD === t.id}">${esc(maskDef(t, shortDef(t.d)))}</button>`).join("")}</div>`;
+  const tick = () => { const c = $("clock"); if (c) c.textContent = fmtTime(Date.now() - M.t0); };
+  tick(); clearInterval(timer); timer = setInterval(tick, 1000);
+  view().querySelectorAll(".tchip:not(.done)").forEach(b => b.onclick = () => { M.selT = +b.dataset.id; tryMatch(b); });
+  view().querySelectorAll("button.dcard").forEach(b => b.onclick = () => { M.selD = +b.dataset.id; tryMatch(b); });
+}
+function tryMatch(el){
+  if (M.selT === null || M.selD === null) { vMatch(); return; }
+  if (M.selT === M.selD) {
+    M.done.add(M.selT); M.selT = M.selD = null;
+    if (M.done.size === M.items.length) { M.end = Date.now(); clearInterval(timer); const ms = M.end - M.t0; if (!S.best || ms < S.best) { S.best = ms; save(); } }
+    vMatch();
+  } else {
+    M.err++; M.selT = M.selD = null; vMatch();
+    const a = view().querySelector(".dlist"); if (a) { a.classList.add("shake"); setTimeout(() => a.classList.remove("shake"), 400); }
+  }
+}
+
+/* ---------- Test ---------- */
+function distract(t, n){
+  const same = shuffle(TERMS.filter(x => x.t === t.t && x.id !== t.id));
+  const other = shuffle(TERMS.filter(x => x.t !== t.t));
+  return same.concat(other).slice(0, n);
+}
+function buildTest(){
+  const n = Math.min(S.tcount, pool().length);
+  const terms = shuffle(pool()).slice(0, n);
+  const qs = terms.map(t => {
+    const type = S.tmode === "write" ? "write" : S.tmode === "mc" ? (Math.random() < .5 ? "d2t" : "t2d") : ["d2t","t2d","write"][Math.floor(Math.random() * 3)];
+    return { t, type, opts: type === "write" ? null : shuffle([t].concat(distract(t, 3))) };
+  });
+  T = { qs, i:0, ans:null, right:null, score:0, wrong:[], started:new Date() };
+}
+function vTest(){
+  if (!T) return vTestSetup();
+  if (T.i >= T.qs.length) return vTestResult();
+  const q = T.qs[T.i], t = q.t, done = T.ans !== null;
+  let body = "";
+  if (q.type === "d2t") {
+    body = `<p class="mono muted" style="margin:0">Welcher Begriff passt?</p><p class="qtext" style="margin:0">${esc(maskDef(t, t.d))}</p>
+      <div class="opts">${q.opts.map((o, i) => `<button class="opt ${done ? (o.id === t.id ? "right" : (T.ans === i ? "wrong" : "")) : ""}" data-i="${i}" ${done ? "disabled" : ""}><span class="k">${"ABCD"[i]}</span><span>${esc(o.name)}</span></button>`).join("")}</div>`;
+  } else if (q.type === "t2d") {
+    body = `<p class="mono muted" style="margin:0">Welche Erklärung passt?</p><p class="qtext big" style="margin:0">${esc(t.name)}</p>
+      <div class="opts">${q.opts.map((o, i) => `<button class="opt ${done ? (o.id === t.id ? "right" : (T.ans === i ? "wrong" : "")) : ""}" data-i="${i}" ${done ? "disabled" : ""}><span class="k">${"ABCD"[i]}</span><span>${esc(maskDef(o, shortDef(o.d)))}</span></button>`).join("")}</div>`;
+  } else {
+    body = `<p class="mono muted" style="margin:0">Schreibe den Fachbegriff</p><p class="qtext" style="margin:0">${esc(maskDef(t, t.d))}</p>
+      <form id="wf" class="row" autocomplete="off"><input class="input grow" id="w-in" placeholder="Fachbegriff" ${done ? "disabled" : ""} value="${done ? esc(T.ans) : ""}" autocapitalize="off" spellcheck="false" style="min-width:0"><button class="btn" ${done ? "disabled" : ""}>Prüfen</button></form>`;
+  }
+  const fb = done ? `<div class="fb ${T.right ? "ok" : "no"}" aria-live="polite"><strong>${T.right ? "Richtig" : "Nicht ganz"}: ${esc(t.name)}</strong><span>${esc(t.d)}</span>${t.x ? `<span class="muted">z. B. ${esc(t.x)}</span>` : ""}</div>
+      <button class="btn" id="tnext">${T.i + 1 < T.qs.length ? "Weiter" : "Zum Ergebnis"}</button>` : "";
+  view().innerHTML = `<div class="spread"><span class="clock">Frage ${T.i + 1} von ${T.qs.length}</span><span class="clock">${T.score} richtig</span></div>
+    <div class="progress"><i style="width:${T.i / T.qs.length * 100}%"></i></div>
+    <section class="panel" style="display:grid;gap:14px">${topicTag(t)}${body}</section>${fb}`;
+  if (!done) {
+    view().querySelectorAll(".opt").forEach(b => b.onclick = () => answer(+b.dataset.i, q.opts[+b.dataset.i].id === t.id));
+    const f = $("wf"); if (f) { const inp = $("w-in"); inp.focus(); f.onsubmit = e => { e.preventDefault(); if (inp.value.trim()) answer(inp.value.trim(), checkWritten(t, inp.value)); }; }
+  } else { $("tnext").onclick = () => { T.i++; T.ans = null; T.right = null; vTest(); }; $("tnext").focus(); }
+}
+function answer(a, ok){
+  const t = T.qs[T.i].t;
+  T.ans = a; T.right = ok;
+  if (ok) { T.score++; know(t); } else { T.wrong.push(t); miss(t); }
+  vTest();
+}
+function vTestSetup(){
+  const n = pool().length;
+  view().innerHTML = `<section class="panel" style="display:grid;gap:16px">
+    <h2 style="font-size:26px">Test starten</h2>
+    <p style="margin:0" class="muted">Themen: ${esc(selLabel())} (${n} Begriffe)</p>
+    <div><p class="mono muted" style="margin:0 0 6px">Anzahl Fragen</p><div class="seg" id="cnt">${[10,20,30].map(c => `<button data-c="${c}" aria-pressed="${S.tcount === c}">${c}</button>`).join("")}</div></div>
+    <div><p class="mono muted" style="margin:0 0 6px">Fragetyp</p><div class="seg" id="md">${[["mix","Gemischt"],["mc","Multiple Choice"],["write","Begriffe schreiben"]].map(([k,l]) => `<button data-m="${k}" aria-pressed="${S.tmode === k}">${l}</button>`).join("")}</div></div>
+    <div><button class="btn" id="go" ${n < 4 ? "disabled" : ""}>Test beginnen</button></div>
+    <p class="note" style="margin:0">Am Ende zeigt die App ein Ergebnis mit Punkten. Mach davon einen Screenshot und schick ihn deiner Lehrkraft.</p></section>`;
+  view().querySelectorAll("#cnt button").forEach(b => b.onclick = () => { S.tcount = +b.dataset.c; save(); vTestSetup(); });
+  view().querySelectorAll("#md button").forEach(b => b.onclick = () => { S.tmode = b.dataset.m; save(); vTestSetup(); });
+  $("go").onclick = () => { buildTest(); vTest(); };
+}
+function vTestResult(){
+  const n = T.qs.length, pct = Math.round(T.score / n * 100), p = punkte(pct);
+  const d = T.started.toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" }) + ", " + T.started.toLocaleTimeString("de-DE", { hour:"2-digit", minute:"2-digit" });
+  const modeName = { mix:"gemischt", mc:"Multiple Choice", write:"Begriffe schreiben" }[S.tmode];
+  view().innerHTML = `<section class="result" id="result">
+    <div class="spread"><span class="mono">Testergebnis · Geo-Begriffstrainer</span><span class="mono">${esc(d)}</span></div>
+    <label class="mono muted" for="nm">Name</label>
+    <input class="input" id="nm" placeholder="Vor- und Nachname" value="${esc(S.name)}" autocomplete="name">
+    <div class="score"><b>${T.score}/${n}</b><span style="font-size:20px;font-weight:700">${pct} % · ${p} ${p === 1 ? "Punkt" : "Punkte"}</span></div>
+    <dl class="kv"><dt>Themen</dt><dd>${esc(selLabel())}</dd><dt>Fragetyp</dt><dd>${modeName}</dd></dl>
+    ${T.wrong.length ? `<div><p class="mono muted" style="margin:0 0 4px">Noch üben</p><ul class="wronglist">${T.wrong.map(t => `<li>${esc(t.name)}</li>`).join("")}</ul></div>` : `<p style="margin:0;font-weight:700;color:var(--ok)">Alles richtig.</p>`}
+  </section>
+  <p class="note" style="margin:0">Trag deinen Namen ein, mach einen Screenshot dieses Kastens und schick ihn deiner Lehrkraft.</p>
+  <div class="row">${T.wrong.length ? `<button class="btn" id="drill">Falsche als Karteikarten üben</button>` : ""}<button class="btn ${T.wrong.length ? "ghost" : ""}" id="again">Neuer Test</button></div>`;
+  $("nm").oninput = e => { S.name = e.target.value; save(); };
+  if ($("drill")) $("drill").onclick = () => { initCards(shuffle(T.wrong)); T = null; location.hash = "karten"; };
+  $("again").onclick = () => { T = null; vTest(); };
+}
+
+/* ---------- Anwenden ---------- */
+function mixCase(c){
+  const ord = /^Pfeil /.test(c.opts[0]) ? c.opts.map((_, i) => i) : shuffle(c.opts.map((_, i) => i));
+  return Object.assign({}, c, { opts: ord.map(i => c.opts[i]), a: c.a.map(x => ord.indexOf(x)) });
+}
+function initApply(){ A = { list: shuffle(CASES.filter(c => inSel(c.t))).map(mixCase), i:0, picked:new Set(), checked:false, score:0 }; }
+function vApply(){
+  if (!A) initApply();
+  if (!A.list.length) { view().innerHTML = `<div class="panel">Für diese Themenfelder gibt es noch keine Fallbeispiele. Wähle oben ein anderes Thema.</div>`; return; }
+  if (A.i >= A.list.length) {
+    view().innerHTML = `<section class="panel" style="display:grid;gap:12px"><h2 style="font-size:26px">Alle Fälle bearbeitet</h2>
+      <p style="margin:0">${A.score} von ${A.list.length} Fällen richtig gelöst.</p><div><button class="btn" id="again">Noch einmal mischen</button></div></section>`;
+    $("again").onclick = () => { initApply(); vApply(); };
+    return;
+  }
+  const c = A.list[A.i], multi = c.a.length > 1;
+  const ok = A.checked && c.a.length === A.picked.size && c.a.every(i => A.picked.has(i));
+  view().innerHTML = `<div class="spread"><span class="clock">Fall ${A.i + 1} von ${A.list.length}</span><span class="clock">${A.score} gelöst</span></div>
+  <div class="progress"><i style="width:${A.i / A.list.length * 100}%"></i></div>
+  <article class="panel case" style="display:grid;gap:12px">
+    <span class="mono place" style="display:inline-flex;gap:6px;align-items:center"><span class="dot" style="background:${tc(c.t)}"></span>${esc(c.place)}</span>
+    <h2>${esc(c.title)}</h2>
+    ${c.svg ? `<div class="figure">${SVG[c.svg]()}</div>` : ""}
+    <p style="margin:0">${esc(c.text)}</p>
+    <p class="qtext" style="margin:0">${esc(c.q)}${multi ? ` <span class="muted" style="font-weight:400">(wähle ${c.a.length})</span>` : ""}</p>
+    <div class="opts">${c.opts.map((o, i) => {
+      let cls = "";
+      if (A.checked) cls = c.a.includes(i) ? "right" : (A.picked.has(i) ? "wrong" : "");
+      return `<button class="opt ${cls}" data-i="${i}" aria-pressed="${A.picked.has(i)}" ${A.checked ? "disabled" : ""}><span class="k">${"ABCD"[i]}</span><span>${esc(o)}</span></button>`;
+    }).join("")}</div>
+    ${A.checked ? `<div class="fb ${ok ? "ok" : "no"}"><strong>${ok ? "Richtig" : "Nicht ganz"}</strong><span>${esc(c.why)}</span></div>` : ""}
+  </article>
+  ${A.checked ? `<button class="btn" id="anext">${A.i + 1 < A.list.length ? "Nächster Fall" : "Abschließen"}</button>` : `<button class="btn" id="check" ${A.picked.size === c.a.length ? "" : "disabled"}>Prüfen</button>`}`;
+  if (!A.checked) {
+    view().querySelectorAll(".opt").forEach(b => b.onclick = () => {
+      const i = +b.dataset.i;
+      if (multi) { A.picked.has(i) ? A.picked.delete(i) : (A.picked.size < c.a.length && A.picked.add(i)); }
+      else A.picked = new Set([i]);
+      vApply();
+    });
+    $("check").onclick = () => { A.checked = true; if (c.a.length === A.picked.size && c.a.every(i => A.picked.has(i))) A.score++; vApply(); };
+  } else $("anext").onclick = () => { A.i++; A.picked = new Set(); A.checked = false; vApply(); window.scrollTo(0, 0); };
+}
+
+/* ---------- Glossar ---------- */
+function vGloss(){
+  view().innerHTML = `<div class="search"><input class="input" id="gq" type="search" placeholder="Begriff oder Stichwort suchen" value="${esc(G.q)}" aria-label="Glossar durchsuchen"></div><div id="glist"></div>`;
+  const inp = $("gq"); inp.oninput = () => { G.q = inp.value; glist(); }; glist();
+}
+function glist(){
+  const q = norm(G.q);
+  const list = pool().filter(t => !q || norm(t.name).includes(q) || norm(t.d).includes(q)).sort((a, b) => a.name.localeCompare(b.name, "de", { sensitivity:"base" }));
+  let h = `<p class="note" style="margin:8px 0 0">${list.length} Begriffe · ${esc(selLabel())}</p><div class="gl">`, last = "";
+  const stName = ["neu","in Arbeit","in Arbeit","sicher"];
+  list.forEach(t => {
+    const L = t.name[0].toUpperCase().replace(/[ÄÖÜ]/, m => ({ Ä:"A", Ö:"O", Ü:"U" }[m]));
+    if (L !== last) { h += `<h3>${L}</h3>`; last = L; }
+    const b = box(t.name);
+    h += `<div class="gi"><div class="h"><span class="dot" style="background:${tc(t.t)}"></span><b>${esc(t.name)}</b>${t.p ? `<span class="pg">S. ${t.p}</span>` : ""}<span class="st s${b}">${stName[b]}</span></div><p>${esc(t.d)}</p>${t.x ? `<p class="x">z. B. ${esc(t.x)}</p>` : ""}</div>`;
+  });
+  $("glist").innerHTML = h + "</div>";
+}
+
+/* ---------- Grafiken ---------- */
+const SVG = {
+  klima(){
+    const T = [24.5,27.5,31.5,34.5,34.5,32,29,28,29.5,31.5,28.5,25], P = [0,0,3,6,35,75,155,190,90,15,1,0];
+    const x0 = 44, x1 = 300, y0 = 190, w = (x1 - x0) / 12;
+    let s = `<svg viewBox="0 0 340 230" role="img" aria-label="Klimadiagramm Station X">`;
+    s += `<text x="170" y="14" text-anchor="middle" class="sv-label">Station X · 13° N · Ø 29,7 °C · 570 mm</text>`;
+    for (let t = 0; t <= 50; t += 10) { const y = y0 - t * 3.2; s += `<line x1="${x0}" x2="${x1}" y1="${y}" y2="${y}" class="sv-grid"/><text x="${x0 - 6}" y="${y + 3}" text-anchor="end" class="sv-text">${t}</text><text x="${x1 + 6}" y="${y + 3}" class="sv-text">${t * 4}</text>`; }
+    s += `<text x="${x0 - 6}" y="26" text-anchor="end" class="sv-text">°C</text><text x="${x1 + 6}" y="26" class="sv-text">mm</text>`;
+    P.forEach((p, i) => { const h = p * 0.8; s += `<rect x="${(x0 + i * w + 3).toFixed(1)}" y="${(y0 - h).toFixed(1)}" width="${(w - 6).toFixed(1)}" height="${h.toFixed(1)}" class="sv-p"/>`; });
+    s += `<polyline class="sv-t" points="${T.map((t, i) => `${(x0 + i * w + w / 2).toFixed(1)},${(y0 - t * 3.2).toFixed(1)}`).join(" ")}"/>`;
+    "JFMAMJJASOND".split("").forEach((m, i) => s += `<text x="${(x0 + i * w + w / 2).toFixed(1)}" y="${y0 + 15}" text-anchor="middle" class="sv-text">${m}</text>`);
+    s += `<line x1="${x0}" x2="${x1}" y1="${y0}" y2="${y0}" class="sv-axis"/>`;
+    s += `<text x="170" y="224" text-anchor="middle" class="sv-text">Linie: Temperatur · Säulen: Niederschlag · 10 °C ≙ 40 mm</text></svg>`;
+    return s;
+  },
+  treibhaus(){
+    const badge = (x, y, l) => `<circle cx="${x}" cy="${y}" r="10" class="sv-badge"/><text x="${x}" y="${y + 4}" text-anchor="middle" class="sv-label">${l}</text>`;
+    return `<svg viewBox="0 0 340 230" role="img" aria-label="Schema der Strahlung">
+      <defs><marker id="mo" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0L10,5L0,10z" class="sv-mo"/></marker>
+      <marker id="mh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0L10,5L0,10z" class="sv-mh"/></marker></defs>
+      <text x="330" y="16" text-anchor="end" class="sv-text">Weltraum</text>
+      <circle cx="36" cy="32" r="16" class="sv-sun"/>
+      <rect x="0" y="90" width="340" height="40" class="sv-atm"/><text x="330" y="114" text-anchor="end" class="sv-text">Atmosphäre mit Treibhausgasen</text>
+      <rect x="0" y="188" width="340" height="42" class="sv-ground"/><text x="330" y="214" text-anchor="end" class="sv-text">Erdoberfläche</text>
+      <line x1="54" y1="46" x2="118" y2="184" class="sv-sw" marker-end="url(#mo)"/>
+      <line x1="142" y1="184" x2="186" y2="36" class="sv-sw" stroke-dasharray="6 4" marker-end="url(#mo)"/>
+      <line x1="226" y1="186" x2="246" y2="96" class="sv-lw" marker-end="url(#mh)"/>
+      <line x1="292" y1="94" x2="292" y2="184" class="sv-lw" marker-end="url(#mh)"/>
+      ${badge(70, 108, "A")}${badge(178, 70, "B")}${badge(254, 150, "C")}${badge(308, 150, "D")}
+      <text x="10" y="74" class="sv-text">kurzwellig</text><text x="200" y="174" class="sv-text">langwellig</text></svg>`;
+  },
+  demo(){
+    const y = r => 196 - r * 3.8, pts = a => a.map(([x, r]) => `${x},${y(r).toFixed(1)}`).join(" ");
+    const B = [[30,40],[90,40],[150,38],[210,21],[270,12],[330,9]];
+    const D = [[30,37],[50,40],[70,36],[90,34],[120,24],[150,15],[210,11],[270,10],[330,11]];
+    let s = `<svg viewBox="0 0 350 225" role="img" aria-label="Modell des demografischen Übergangs">`;
+    s += `<polygon class="sv-gap" points="${pts([[90,40],[150,38],[210,21],[270,12],[270,10],[210,11],[150,15],[120,24],[90,34]])}"/>`;
+    for (let i = 1; i < 5; i++) s += `<line x1="${30 + i * 60}" x2="${30 + i * 60}" y1="26" y2="196" class="sv-grid"/>`;
+    for (let i = 0; i < 5; i++) s += `<text x="${60 + i * 60}" y="20" text-anchor="middle" class="sv-label">Phase ${i + 1}</text>`;
+    [0,10,20,30,40].forEach(r => s += `<text x="24" y="${(y(r) + 3).toFixed(1)}" text-anchor="end" class="sv-text">${r}</text>`);
+    s += `<line x1="30" x2="330" y1="196" y2="196" class="sv-axis"/><line x1="30" x2="30" y1="26" y2="196" class="sv-axis"/>`;
+    s += `<polyline class="sv-l1" points="${pts(B)}"/><polyline class="sv-l2" points="${pts(D)}"/>`;
+    s += `<text x="216" y="${(y(23) - 4).toFixed(1)}" class="sv-label" style="fill:var(--petrol)">Linie 1</text><text x="158" y="${(y(13) + 16).toFixed(1)}" class="sv-label" style="fill:var(--ochre)">Linie 2</text>`;
+    s += `<text x="180" y="216" text-anchor="middle" class="sv-text">Zeit → · Raten in ‰</text></svg>`;
+    return s;
+  },
+  lorenz(){
+    const x0 = 70, y0 = 190, L = 160, P = a => a.map(([x, v]) => `${(x0 + x * L).toFixed(1)},${(y0 - v * L).toFixed(1)}`).join(" ");
+    const A = [[0,0],[.2,.12],[.4,.29],[.6,.49],[.8,.72],[1,1]], B = [[0,0],[.2,.03],[.4,.1],[.6,.22],[.8,.42],[1,1]];
+    let s = `<svg viewBox="0 0 320 230" role="img" aria-label="Lorenzkurven zweier Länder">`;
+    [0,.25,.5,.75,1].forEach(v => { s += `<text x="${x0 - 6}" y="${(y0 - v * L + 3).toFixed(1)}" text-anchor="end" class="sv-text">${v * 100}</text><text x="${(x0 + v * L).toFixed(1)}" y="${y0 + 14}" text-anchor="middle" class="sv-text">${v * 100}</text>`; });
+    s += `<rect x="${x0}" y="${y0 - L}" width="${L}" height="${L}" class="sv-axis"/><line x1="${x0}" y1="${y0}" x2="${x0 + L}" y2="${y0 - L}" class="sv-diag"/>`;
+    s += `<polyline class="sv-l1" points="${P(A)}"/><polyline class="sv-l2" points="${P(B)}"/>`;
+    s += `<text x="${x0 + .52 * L}" y="${y0 - .44 * L}" class="sv-label" style="fill:var(--petrol)">Land A</text><text x="${x0 + .62 * L}" y="${y0 - .14 * L}" class="sv-label" style="fill:var(--ochre)">Land B</text>`;
+    s += `<text x="${x0 + L / 2}" y="${y0 + 30}" text-anchor="middle" class="sv-text">Anteil Bevölkerung (%), von arm nach reich</text>`;
+    s += `<text transform="translate(22 ${y0 - L / 2}) rotate(-90)" text-anchor="middle" class="sv-text">Anteil Einkommen (%)</text></svg>`;
+    return s;
+  },
+  zentral(){
+    const cx = 170, cy = 108, hex = (r, rot) => Array.from({ length:6 }, (_, i) => { const a = Math.PI / 3 * i + rot; return `${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`; }).join(" ");
+    let s = `<svg viewBox="0 0 340 225" role="img" aria-label="Modell zentraler Orte">`;
+    s += `<polygon points="${hex(100, 0)}" class="sv-hex"/>`;
+    for (let i = 0; i < 6; i++) { const a = Math.PI / 3 * i + Math.PI / 6; s += `<line x1="${cx}" y1="${cy}" x2="${(cx + 58 * Math.cos(a)).toFixed(1)}" y2="${(cy + 58 * Math.sin(a)).toFixed(1)}" class="sv-grid"/>`; }
+    for (let i = 0; i < 6; i++) { const a = Math.PI / 3 * i; s += `<circle cx="${(cx + 30 * Math.cos(a)).toFixed(1)}" cy="${(cy + 30 * Math.sin(a)).toFixed(1)}" r="3.5" class="sv-g"/><circle cx="${(cx + 84 * Math.cos(a)).toFixed(1)}" cy="${(cy + 84 * Math.sin(a)).toFixed(1)}" r="3.5" class="sv-g"/>`; }
+    for (let i = 0; i < 6; i++) { const a = Math.PI / 3 * i + Math.PI / 6; s += `<circle cx="${(cx + 58 * Math.cos(a)).toFixed(1)}" cy="${(cy + 58 * Math.sin(a)).toFixed(1)}" r="8" class="sv-m"/>`; }
+    s += `<circle cx="${cx}" cy="${cy}" r="14" class="sv-o"/><text x="${cx}" y="${cy + 5}" text-anchor="middle" class="sv-onp">?</text>`;
+    s += `<circle cx="40" cy="214" r="6" class="sv-o"/><text x="50" y="218" class="sv-text">Ort in der Mitte</text>`;
+    s += `<circle cx="160" cy="214" r="5" class="sv-m"/><text x="169" y="218" class="sv-text">mittlere Orte</text>`;
+    s += `<circle cx="262" cy="214" r="3.5" class="sv-g"/><text x="270" y="218" class="sv-text">kleine Orte</text></svg>`;
+    return s;
+  }
+};
+
+/* ---------- Tastatur ---------- */
+document.addEventListener("keydown", e => {
+  if (cur !== "karten" || !C || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  if (e.key === " ") { e.preventDefault(); $("flip") && $("flip").click(); }
+  if (C.flip && e.key === "ArrowRight") $("yes") && $("yes").click();
+  if (C.flip && e.key === "ArrowLeft") $("no") && $("no").click();
+});
+
+route();
+</script>
