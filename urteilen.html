@@ -1,0 +1,730 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Geo-Urteilswerkstatt</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: Arbeitsheft – Material links (breit), Schreibplan rechts; am Handy Material als Klappteil oben */
+:root{
+  --paper:#ECF1EE; --surface:#FFFFFF; --surface2:#F4F7F5; --ink:#13222A; --muted:#566A70; --line:#C9D4D0;
+  --petrol:#0E676C; --on-petrol:#FFFFFF; --petrol-soft:#D4E8E5;
+  --ochre:#B4621A; --ochre-soft:#F5E2CD;
+  --ok:#22704A; --ok-soft:#D7EDDF; --bad:#AE3434; --bad-soft:#F5DADA;
+  --d-u:#3D8A3F; --d-w:#2F74B5; --d-g:#C08A12; --d-p:#8A5B34;
+  --f-d:"Avenir Next","Segoe UI Variable Display","Segoe UI",Roboto,ui-sans-serif,system-ui,sans-serif;
+  --f-b:"Segoe UI",Roboto,"Helvetica Neue",ui-sans-serif,system-ui,sans-serif;
+  --f-m:ui-monospace,"SF Mono",Consolas,Menlo,monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#0E1619; --surface:#16232A; --surface2:#1B2B32; --ink:#E2EBE9; --muted:#93A8AC; --line:#2B3E45;
+  --petrol:#55B5B2; --on-petrol:#06282A; --petrol-soft:#173A3C;
+  --ochre:#E39A50; --ochre-soft:#3A2A19;
+  --ok:#5EBB84; --ok-soft:#173826; --bad:#E57070; --bad-soft:#3E1D1F;
+  --d-u:#72C075; --d-w:#6DA8E0; --d-g:#E2B444; --d-p:#C9966A;
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --paper:#0E1619; --surface:#16232A; --surface2:#1B2B32; --ink:#E2EBE9; --muted:#93A8AC; --line:#2B3E45;
+  --petrol:#55B5B2; --on-petrol:#06282A; --petrol-soft:#173A3C;
+  --ochre:#E39A50; --ochre-soft:#3A2A19;
+  --ok:#5EBB84; --ok-soft:#173826; --bad:#E57070; --bad-soft:#3E1D1F;
+  --d-u:#72C075; --d-w:#6DA8E0; --d-g:#E2B444; --d-p:#C9966A;
+  color-scheme:dark; }
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:400 17px/1.5 var(--f-b);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--petrol)}
+button,select,input,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-d);text-wrap:balance;margin:0;line-height:1.15}
+p{margin:0}
+.mono{font-family:var(--f-m);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.muted{color:var(--muted)}
+.note{font-size:14px;color:var(--muted)}
+:focus-visible{outline:3px solid var(--ochre);outline-offset:2px}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--petrol);color:var(--on-petrol)}
+.top-in{max-width:1120px;margin:0 auto;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;align-items:center;gap:12px;justify-content:space-between}
+.brand{font-family:var(--f-d);font-weight:800;font-size:20px;white-space:nowrap;color:inherit;text-decoration:none}
+.top a.out{color:var(--on-petrol);font-size:14px;font-weight:600;white-space:nowrap}
+.wrap{max-width:1120px;margin:0 auto;padding-block:16px 120px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:16px}
+.narrow{max-width:760px;width:100%;margin:0 auto;display:grid;gap:16px}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:12px;min-width:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.spread{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--petrol);color:var(--on-petrol);min-height:44px}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.warn{background:var(--bad);color:var(--surface)}
+.btn.small{padding:6px 12px;min-height:36px;font-size:15px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.linkbtn{background:none;border:0;padding:0;color:var(--petrol);text-decoration:underline;cursor:pointer;font-size:15px;font-weight:600}
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-m);font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:6px;border:1.5px solid currentColor}
+.badge.bewerten{color:var(--ochre)} .badge.beurteilen{color:var(--petrol)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+
+/* Start */
+.hero h1{font-size:clamp(30px,6vw,44px);font-weight:800;letter-spacing:-.02em}
+.hero p{margin-top:6px;color:var(--muted);max-width:62ch}
+.steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:2px;min-width:0}
+.steps li::before{content:counter(s);font-family:var(--f-d);font-weight:800;font-size:24px;color:var(--petrol);line-height:1}
+.steps b{font-size:15px}
+.steps span{font-size:13.5px;color:var(--muted);line-height:1.35}
+.cases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.case{display:grid;gap:8px;align-content:start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;text-decoration:none;color:inherit;min-width:0}
+.case:hover{border-color:var(--petrol)}
+.case h3{font-size:21px}
+.case .q{font-size:15px;color:var(--muted);line-height:1.4}
+.case .pl{font-family:var(--f-m);font-size:12px;color:var(--ochre);text-transform:uppercase;letter-spacing:.04em}
+.meter{display:flex;gap:4px}
+.meter i{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.meter i.on{background:var(--petrol)}
+
+/* Fall */
+.fall-head{display:grid;gap:8px}
+.fall-head h1{font-size:clamp(26px,5vw,36px);font-weight:800}
+.frage{font-size:19px;font-weight:600;max-width:70ch}
+.fall-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+.mats{display:grid;gap:10px}
+.mat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:6px}
+.mat .mh{display:flex;gap:8px;align-items:baseline}
+.mat .mh b{font-family:var(--f-m);font-size:13px;color:var(--on-petrol);background:var(--petrol);border-radius:5px;padding:1px 6px}
+.mat .mh span{font-weight:700}
+.mat p{font-size:15.5px;line-height:1.5}
+.mat .src{font-size:12.5px;color:var(--muted);font-style:italic}
+details.matbox{background:var(--surface2);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+details.matbox summary{cursor:pointer;font-weight:700;list-style-position:inside}
+details.matbox[open] summary{margin-bottom:10px}
+.stepper{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.stepper button{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 4px;cursor:pointer;display:grid;justify-items:center;gap:0;min-width:0;font-size:13px;font-weight:600;color:var(--muted)}
+.stepper button b{font-family:var(--f-d);font-size:18px;color:var(--ink)}
+.stepper button[aria-current="step"]{border-color:var(--petrol);background:var(--petrol);color:var(--on-petrol)}
+.stepper button[aria-current="step"] b{color:var(--on-petrol)}
+.stepper button.done{border-color:var(--petrol)}
+.work{display:grid;gap:14px;min-width:0}
+.work h2{font-size:24px}
+label.lab{font-weight:700;display:block;margin-bottom:6px}
+textarea,input[type=text],select{width:100%;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;font-size:16px;line-height:1.45}
+textarea{resize:vertical;min-height:84px}
+textarea.big{min-height:300px}
+.chipset{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:15px;font-weight:600;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.ins{display:inline-block;border:1px dashed var(--petrol);background:var(--petrol-soft);color:var(--ink);border-radius:8px;padding:4px 9px;font-size:14px;cursor:pointer;text-align:left}
+.ins:hover{border-style:solid}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;cursor:pointer}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.fb{border-radius:10px;padding:12px 14px;display:grid;gap:4px}
+.fb.ok{background:var(--ok-soft);border:1.5px solid var(--ok)}
+.fb.no{background:var(--bad-soft);border:1.5px solid var(--bad)}
+.fb.info{background:var(--ochre-soft);border:1.5px solid var(--ochre)}
+.dimcard{border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:10px;background:var(--surface)}
+.dimcard h3{font-size:19px;display:flex;align-items:center;gap:8px}
+.arg{display:grid;gap:8px;padding:10px;border-radius:10px;background:var(--surface2);border:1px solid var(--line)}
+.arg .ctl{display:grid;grid-template-columns:auto auto 1fr auto;gap:8px;align-items:center}
+.arg .ctl .seg{justify-self:start}
+.wrow{display:inline-flex;align-items:center;gap:6px}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:var(--surface);padding:6px 10px;font-weight:600;cursor:pointer;font-size:14px;min-height:34px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.seg.pc button[data-v="pro"][aria-pressed="true"]{background:var(--ok);color:var(--surface)}
+.seg.pc button[data-v="contra"][aria-pressed="true"]{background:var(--bad);color:var(--surface)}
+select.m{width:auto;padding:6px 8px;font-size:14px}
+.help{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.hint{font-size:15px;background:var(--ochre-soft);border-radius:8px;padding:8px 10px;display:grid;gap:6px}
+.raster{width:100%;border-collapse:collapse;font-size:15px}
+.raster th,.raster td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.raster th{font-family:var(--f-m);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.tw{overflow-x:auto}
+.pc-pro{color:var(--ok);font-weight:700} .pc-contra{color:var(--bad);font-weight:700}
+.wt{font-family:var(--f-m);letter-spacing:1px;color:var(--ochre)}
+.posline{display:grid;gap:6px}
+.posline input{width:100%;accent-color:var(--petrol)}
+.posline .ends{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
+.posline .now{font-weight:700;text-align:center}
+.checks{display:grid;gap:6px}
+.checks label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:15.5px}
+.checks input{width:20px;height:20px;margin-top:2px;accent-color:var(--petrol);flex:0 0 auto}
+.checks small{display:block;color:var(--muted);font-size:13.5px}
+.muster{border:2px solid var(--ok);border-radius:var(--r);padding:16px;display:grid;gap:10px;background:var(--surface)}
+.muster ul{margin:0;padding-left:20px}
+.navrow{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* Reparieren */
+.weak{font-size:17px;line-height:1.6;background:var(--surface2);border-left:4px solid var(--bad);padding:12px 14px;border-radius:0 10px 10px 0}
+.good{font-size:16px;line-height:1.6;background:var(--ok-soft);border-left:4px solid var(--ok);padding:12px 14px;border-radius:0 10px 10px 0}
+.res-ok{color:var(--ok);font-weight:700} .res-no{color:var(--bad);font-weight:700}
+
+/* Schema & Bausteine */
+.optable{width:100%;border-collapse:collapse;font-size:15.5px}
+.optable th,.optable td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.optable th{font-family:var(--f-m);font-size:12px;text-transform:uppercase;color:var(--muted)}
+.dims{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.dimbox{border:1.5px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:4px}
+.dimbox b{display:flex;align-items:center;gap:8px;font-family:var(--f-d);font-size:18px}
+.dimbox span{font-size:14.5px;color:var(--muted)}
+.ladder{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:14.5px}
+.ladder span{border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:var(--surface2)}
+.bgroup{display:grid;gap:8px}
+.bgroup h3{font-size:18px}
+.copied{color:var(--ok);font-size:13px;font-weight:700}
+
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.tabs-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.tab{display:grid;justify-items:center;gap:2px;padding:8px 2px 10px;text-decoration:none;color:var(--muted);font-size:12px;font-weight:600}
+.tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab[aria-current="page"]{color:var(--petrol)}
+
+@media (min-width:980px){
+  .fall-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+  .fall-grid .side{position:sticky;top:76px;max-height:calc(100vh - 170px);overflow:auto;padding-right:4px}
+  details.matbox{display:none}
+}
+@media (max-width:979px){ .fall-grid .side{display:none} }
+@media (max-width:860px){ .cases{grid-template-columns:repeat(2,minmax(0,1fr))} .steps{grid-template-columns:minmax(0,1fr)} .steps li{grid-template-columns:28px auto 1fr;align-items:baseline;gap:8px} }
+@media (max-width:560px){
+  .cases,.dims{grid-template-columns:minmax(0,1fr)}
+  .arg .ctl{grid-template-columns:auto 1fr}
+  .stepper button{font-size:11px}
+  .top a.out{display:none}
+}
+@media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} }
+</style>
+<header class="top"><div class="top-in">
+  <a class="brand" href="#faelle">Geo-Urteilswerkstatt</a>
+  <a class="out" href="index.html">Zum Begriffstrainer →</a>
+</div></header>
+<main class="wrap" id="view"></main>
+<nav class="tabs" aria-label="Bereiche"><div class="tabs-in">
+  <a class="tab" href="#faelle" data-r="faelle"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Fälle</a>
+  <a class="tab" href="#schema" data-r="schema"><svg viewBox="0 0 24 24"><path d="M4 20h4v-4h4v-4h4V8h4"/><path d="M4 20V4"/></svg>Schema</a>
+  <a class="tab" href="#formulieren" data-r="formulieren"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg>Formulieren</a>
+  <a class="tab" href="#reparieren" data-r="reparieren"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>Reparieren</a>
+</div></nav>
+<script>
+const DIMS = {
+  u: { name: "Umwelt", adj: "ökologischer" },
+  w: { name: "Wirtschaft", adj: "ökonomischer" },
+  g: { name: "Gesellschaft", adj: "sozialer" },
+  p: { name: "Politik", adj: "politischer" }
+};
+const LEIT = {
+  u: "Wie wirkt sich das auf Klima, Böden, Wasser und Artenvielfalt aus – heute und für künftige Generationen?",
+  w: "Wer verdient daran, wer trägt die Kosten? Was bedeutet es für Arbeitsplätze, Wertschöpfung und Abhängigkeiten?",
+  g: "Wer profitiert, wer wird benachteiligt? Was bedeutet es für Gerechtigkeit, Teilhabe und Lebensqualität?",
+  p: "Ist die Entscheidung demokratisch legitimiert und durchsetzbar? Welche Interessen setzen sich durch?"
+};
+const ANFANG = {
+  u: "Aus ökologischer Sicht spricht dafür/dagegen, dass … (M…).",
+  w: "Ökonomisch ist zu berücksichtigen, dass … (M…).",
+  g: "Unter dem Gesichtspunkt sozialer Gerechtigkeit ist problematisch/positiv, dass … (M…).",
+  p: "Politisch spricht für/gegen die Maßnahme, dass … (M…)."
+};
+const EBENEN = ["lokal", "regional", "national", "global"];
+const ZEIT = ["kurzfristig", "langfristig / künftige Generationen"];
+const OPS = {
+  bewerten: "Bewerten heißt: Du prüfst den Sachverhalt wie beim Beurteilen, legst aber zusätzlich deine Wertmaßstäbe offen und begründest sie. Am Ende steht ein Werturteil, z. B. wünschenswert, vertretbar oder abzulehnen.",
+  beurteilen: "Beurteilen heißt: Du prüfst den Sachverhalt mit Fachwissen anhand genannter Kriterien, z. B. Wirksamkeit oder Nachhaltigkeit, und kommst zu einem begründeten Sachurteil, z. B. wirksam, geeignet oder nur teilweise zutreffend."
+};
+const OPQ = ["Ein Sachurteil anhand fachlicher Kriterien", "Ein Werturteil mit offengelegten Wertmaßstäben", "Eine Darstellung ohne eigenes Urteil", "Nur eine Sammlung von Pro- und Contra-Argumenten"];
+const POS = ["nicht", "eher nicht", "nur teilweise", "überwiegend", "eindeutig"];
+
+const CHECK = [
+  ["mass", "Maßstab offengelegt", "Ich nenne, nach welchen Kriterien oder Werten ich urteile."],
+  ["beleg", "Materialbelege", "Meine Argumente sind mit M1–M4 belegt."],
+  ["mehr", "Mehrere Dimensionen", "Ich berücksichtige mindestens zwei Dimensionen oder Perspektiven."],
+  ["abw", "Zielkonflikt und Gewichtung", "Ich benenne einen Zielkonflikt und begründe, was schwerer wiegt."],
+  ["urteil", "Klares Urteil", "Am Ende steht eine eindeutige, begründete Position."],
+  ["einschr", "Einschränkung", "Ich sage, unter welchen Bedingungen mein Urteil gilt."],
+  ["sprache", "Sachliche Fachsprache", "Ich schreibe sachlich und nutze Fachbegriffe."]
+];
+
+const CASES = [
+{ id:"ostsee", place:"Deutsche Ostsee", title:"Windparks vor der Küste", op:"bewerten",
+  frage:"Bewerte den geplanten Ausbau der Offshore-Windenergie in der deutschen Ostsee im Hinblick auf eine nachhaltige Entwicklung.",
+  subj:"der Ausbau der Offshore-Windenergie in der Ostsee", adj:"nachhaltig", poles:["nicht nachhaltig","nachhaltig"],
+  akteure:["Fischerei","Tourismusbetriebe","Hafen- und Energiewirtschaft","Naturschutzverbände","Stromkunden","künftige Generationen"],
+  mats:[
+    ["M1","Ausbauziele","Laut Windenergie-auf-See-Gesetz sollen in Nord- und Ostsee bis 2030 mindestens 30 Gigawatt (GW) installiert sein, bis 2045 70 GW. Ende 2024 waren es gut 9 GW, davon rund 1,5 GW in der Ostsee. Ziel ist Klimaneutralität bis 2045 und mehr Unabhängigkeit von Energieimporten.","nach WindSeeG 2023 und Deutsche WindGuard, gerundet"],
+    ["M2","Stimmen aus der Region","Fischer: „Wo Windparks stehen, dürfen wir nicht mehr fischen.“ – Hotelier auf Rügen: „Unsere Gäste kommen wegen des freien Horizonts.“ – Hafenbetrieb in Mukran: „Der Servicehafen für die Windparks hat bei uns Dutzende Dauerarbeitsplätze geschaffen.“","typische Positionen, vereinfacht"],
+    ["M3","Meeresnatur","Der Schweinswal der zentralen Ostsee gilt als vom Aussterben bedroht; es gibt nur noch wenige hundert Tiere. Beim Rammen der Fundamente entsteht starker Unterwasserlärm, der z. B. durch Blasenschleier gemindert werden muss. Die Fundamente können zugleich als künstliche Riffe Lebensraum bieten.","nach Bundesamt für Naturschutz, vereinfacht"],
+    ["M4","Netz und Strompreis","Der Strom wird an der Küste erzeugt, aber vor allem im Süden und Westen Deutschlands verbraucht. Dafür sind neue Leitungen nötig, deren Kosten über die Netzentgelte alle Stromkunden tragen. Windstrom hat keine Brennstoffkosten und senkt in windreichen Stunden die Börsenstrompreise.","eigene Zusammenstellung"]
+  ],
+  args:{
+    u:[["pro","Windstrom verursacht im Betrieb keine CO₂-Emissionen und trägt zum Klimaschutz bei.","M1"],["contra","Der Baulärm gefährdet den vom Aussterben bedrohten Schweinswal der Ostsee.","M3"]],
+    w:[["pro","Servicehäfen wie Mukran schaffen dauerhafte Arbeitsplätze in einer strukturschwachen Küstenregion.","M2"],["contra","Der nötige Netzausbau verursacht hohe Kosten, die alle Stromkunden tragen.","M4"]],
+    g:[["contra","Fischer verlieren Fanggebiete, Tourismusbetriebe fürchten um das Landschaftsbild.","M2"],["pro","Windstrom ohne Brennstoffkosten kann Strompreise dämpfen und Haushalte entlasten.","M4"]],
+    p:[["pro","Mehr eigene Stromerzeugung verringert die Abhängigkeit von Energieimporten.","M1"],["contra","Viele Nutzungsansprüche auf engem Meeresraum führen zu Raumnutzungskonflikten, die Planungen verzögern.","M2"]]
+  },
+  konflikt:"Ein Zielkonflikt besteht innerhalb der ökologischen Dimension: Der Klimaschutz durch Windstrom (M1) steht gegen den Schutz der Meeresnatur (M3). Schwerer wiegt meines Erachtens der Klimaschutz, weil der Klimawandel langfristig auch die Ostsee selbst bedroht. Der Konflikt lässt sich durch Schallschutz und Bauzeitenregeln abmildern, aber nicht ganz auflösen.",
+  muster:"Ich bewerte den Ausbau der Offshore-Windenergie in der Ostsee am Leitbild nachhaltiger Entwicklung. Besonders stark gewichte ich dabei den Klimaschutz, weil seine Folgen global und für künftige Generationen kaum umkehrbar sind. Aus ökologischer Sicht spricht für den Ausbau, dass Windstrom im Betrieb keine CO₂-Emissionen verursacht (M1). Dem steht entgegen, dass der Baulärm den vom Aussterben bedrohten Schweinswal gefährdet (M3). Ökonomisch schaffen Servicehäfen dauerhafte Arbeitsplätze an der Küste (M2), zugleich verursacht der Netzausbau Kosten für alle Stromkunden (M4). Sozial verlieren Fischerei und Teile des Tourismus Fanggebiete bzw. den freien Horizont (M2). Damit zeigt sich ein Zielkonflikt innerhalb der ökologischen Dimension: Klimaschutz gegen Artenschutz. Schwerer wiegt für mich der Klimaschutz, weil der Klimawandel langfristig auch die Ostsee selbst bedroht. Insgesamt ist der Ausbau daher überwiegend nachhaltig. Dieses Urteil gilt allerdings nur, sofern Schallschutz, Bauzeiten und Schutzgebiete konsequent beachtet und Fischerei und Tourismus an der Planung beteiligt werden.",
+  erw:["Wertmaßstab offengelegt (z. B. Nachhaltigkeitsdimensionen, Generationengerechtigkeit) und begründet","Argumente aus mindestens drei Dimensionen mit Materialbezug (M1–M4)","Zielkonflikt Klimaschutz – Artenschutz bzw. Wirtschaft – Fischerei/Tourismus benannt und gewichtet","Eindeutiges Werturteil mit Bedingung oder Handlungsempfehlung"]
+},
+{ id:"kakao", place:"Côte d’Ivoire", title:"Kakao ohne Entwaldung?", op:"beurteilen",
+  frage:"Beurteile, inwieweit die EU-Entwaldungsverordnung zu einer nachhaltigen Kakaoproduktion in Côte d’Ivoire beitragen kann.",
+  subj:"die EU-Entwaldungsverordnung", adj:"wirksam", poles:["unwirksam","wirksam"],
+  akteure:["Kleinbauernfamilien","Kooperativen","Händler und Schokoladenindustrie","Regierung von Côte d’Ivoire","EU","Verbraucher in Europa"],
+  mats:[
+    ["M1","Kakao und Wald","Côte d’Ivoire produziert rund 40 % des weltweiten Kakaos. Schätzungen zufolge hat das Land seit 1960 über 80 % seiner Wälder verloren, ein großer Teil davon durch die Ausweitung von Kakaopflanzungen, auch in Schutzgebieten.","nach FAO und Weltbank, gerundet"],
+    ["M2","Die Verordnung","Die EU-Entwaldungsverordnung erlaubt den Verkauf von Kakao, Kaffee, Soja, Palmöl, Rindfleisch, Holz und Kautschuk in der EU nur, wenn die Rohstoffe nicht auf Flächen erzeugt wurden, die nach dem 31.12.2020 entwaldet wurden. Importeure müssen dafür die Geodaten jeder Anbaufläche nachweisen. Für Länder außerhalb der EU gilt die Regel nicht. Der Start wurde mehrfach verschoben.","nach Verordnung (EU) 2023/1115, vereinfacht"],
+    ["M3","Kleinbauern","Der Kakao stammt überwiegend von Hunderttausenden Kleinbauernfamilien mit wenigen Hektar Land. Viele leben unter der Armutsgrenze; laut einer Studie arbeiten in Côte d’Ivoire und Ghana rund 1,5 Millionen Kinder im Kakaoanbau. Für die Kartierung ihrer Flächen fehlen oft Geld, Technik und Landtitel.","nach NORC-Studie 2020 und eigener Zusammenstellung"],
+    ["M4","Stimmen","Händler: „Wir kaufen künftig nur noch bei Kooperativen, deren Flächen kartiert sind.“ – Kleinbauer: „Wenn mein Feld nicht registriert ist, verliere ich meinen Käufer.“ – Agroforst-Projekt: „Kakao unter Schattenbäumen bringt pro Baum weniger Ertrag, aber stabilere Böden und Zusatzeinnahmen aus Früchten und Holz.“","typische Positionen, vereinfacht"]
+  ],
+  args:{
+    u:[["pro","Kakao von nach 2020 gerodeten Flächen findet keinen Absatz mehr in der EU; das senkt den Anreiz für neue Rodungen.","M2"],["contra","Kakao von Rodungsflächen kann in Länder ohne solche Regeln verkauft werden; die Entwaldung verlagert sich nur.","M2"]],
+    w:[["pro","Kartierte Lieferketten machen den Handel transparenter und können Prämien für nachhaltigen Kakao ermöglichen.","M4"],["contra","Die Kosten für Kartierung und Nachweise treffen vor allem Kleinbauern ohne Kapital.","M3"]],
+    g:[["contra","Kleinbauern ohne Landtitel drohen aus den Lieferketten zu fallen; ihre Armut kann sich verschärfen.","M3"],["pro","Transparente Lieferketten erleichtern auch Kontrollen gegen Kinderarbeit.","M3"]],
+    p:[["pro","Die EU nutzt ihre Marktmacht, um globale Umweltziele durchzusetzen.","M2"],["contra","Die Regeln werden in Europa gesetzt, ohne dass die Erzeugerländer mitentscheiden; die Verschiebungen zeigen die schwierige Umsetzung.","M2"]]
+  },
+  konflikt:"Zwischen Waldschutz und Existenzsicherung der Kleinbauern besteht ein Zielkonflikt: Strenge Nachweispflichten schützen den Wald (M2), können aber gerade die ärmsten Erzeuger vom Markt ausschließen (M3, M4). Für die Wirksamkeit ist entscheidend, ob beide Ziele zusammen erreicht werden, denn verarmte Bauern roden eher weiter.",
+  muster:"Ich beurteile die EU-Entwaldungsverordnung danach, ob sie wirksam zu einer ökologisch, ökonomisch und sozial nachhaltigen Kakaoproduktion in Côte d’Ivoire beiträgt. Für ihre Wirksamkeit spricht, dass Kakao von nach 2020 gerodeten Flächen nicht mehr in die EU verkauft werden darf (M2). Da das Land rund 40 % des Weltkakaos erzeugt und bereits über 80 % seiner Wälder verloren hat (M1), entsteht ein starker Anreiz, neue Rodungen zu vermeiden. Gegen ihre Wirksamkeit spricht, dass Kakao von Rodungsflächen in Länder ohne solche Regeln ausweichen kann (M2). Ökonomisch und sozial ist die Verordnung problematisch: Die Kosten für Kartierung und Nachweise treffen Kleinbauern ohne Landtitel und Kapital (M3), sodass sie ihre Käufer verlieren können (M4). Hier zeigt sich ein Zielkonflikt zwischen Waldschutz und Existenzsicherung. Insgesamt trägt die Verordnung nur teilweise zu einer nachhaltigen Kakaoproduktion bei: Sie kann Entwaldung bremsen, löst aber die Armut der Erzeuger nicht. Wirksam wird sie erst, wenn Kartierung gefördert, Landrechte geklärt und faire Preise gezahlt werden, etwa für Agroforst-Kakao (M4).",
+  erw:["Beurteilungskriterium genannt (Wirksamkeit für alle Nachhaltigkeitsdimensionen)","Ökologische Wirkung und Grenzen (Verlagerung) mit Materialbezug","Folgen für Kleinbauern und Kinderarbeit berücksichtigt","Zielkonflikt Waldschutz – Existenzsicherung","Differenziertes Sachurteil mit Bedingungen"]
+},
+{ id:"barcelona", place:"Barcelona, Spanien", title:"Schluss mit Ferienwohnungen", op:"bewerten",
+  frage:"Bewerte die Entscheidung Barcelonas, bis 2028 alle rund 10 000 Lizenzen für touristische Ferienwohnungen auslaufen zu lassen.",
+  subj:"das Auslaufen der Ferienwohnungs-Lizenzen", adj:"angemessen", poles:["unangemessen","angemessen"],
+  akteure:["Anwohnerinnen und Anwohner","private Vermieter","Hotels","Touristen","Stadtregierung","Gastronomie und Handel"],
+  mats:[
+    ["M1","Zahlen zur Stadt","Barcelona hat rund 1,7 Millionen Einwohner. Der Tourismus trägt etwa 14 % zur Wirtschaftsleistung der Stadt bei. Laut Stadtverwaltung stiegen die Mieten in den letzten zehn Jahren um rund 68 %; der Wohnungsmangel gilt als größtes soziales Problem der Stadt.","nach Ajuntament de Barcelona, gerundet"],
+    ["M2","Der Beschluss","2024 kündigte die Stadtregierung an, die Lizenzen der rund 10 000 legalen Ferienwohnungen bis November 2028 nicht zu verlängern. Die Wohnungen sollen auf den regulären Mietmarkt zurückkehren. Gleichzeitig wurde die Touristenabgabe erhöht. Kreuzfahrt- und Tagesgäste sind von der Maßnahme nicht betroffen.","eigene Zusammenstellung"],
+    ["M3","Stimmen","Anwohnerin in Barceloneta: „In unserem Haus sind nur noch zwei Wohnungen dauerhaft bewohnt.“ – Vermieterverband: „Viele Familien finanzieren mit einer Ferienwohnung ihre Rente. Das ist eine Enteignung.“ – Ökonom: „Ob die Wohnungen wirklich an Einheimische vermietet werden, ist offen. Manche werden vielleicht verkauft oder illegal weitervermietet.“","typische Positionen, vereinfacht"],
+    ["M4","Protest","Im Sommer 2024 demonstrierten Tausende gegen den Massentourismus; einige bespritzten Touristen mit Wasserpistolen. Die Tourismusbranche warnt vor einem Imageschaden für die Stadt.","nach Presseberichten"]
+  ],
+  args:{
+    g:[["pro","Bis zu 10 000 Wohnungen könnten auf den Mietmarkt zurückkehren und den Mietanstieg bremsen.","M1, M2"],["contra","Ob die Wohnungen tatsächlich bezahlbar an Einheimische gehen, ist unsicher.","M3"]],
+    w:[["contra","Private Vermieter verlieren Einnahmen, die Tourismusbranche fürchtet einen Imageschaden.","M3, M4"],["pro","Gäste weichen stärker auf Hotels aus, die geregelt Abgaben zahlen; die höhere Touristenabgabe bringt der Stadt Einnahmen.","M2"]],
+    u:[["pro","Weniger Übernachtungsgäste in Wohnvierteln können die Überlastung dort verringern.","M2, M4"],["contra","Kreuzfahrt- und Tagesgäste sind nicht betroffen, das Hauptproblem der Überfüllung bleibt.","M2"]],
+    p:[["pro","Die Stadt reagiert auf breiten Protest und stärkt Wohnen als Daseinsgrundfunktion.","M4"],["contra","Der Eingriff ins Eigentum ist umstritten und kann vor Gericht angefochten werden.","M3"]]
+  },
+  konflikt:"Es besteht ein Zielkonflikt zwischen den Einnahmen aus dem Tourismus, der etwa 14 % der Wirtschaftsleistung trägt (M1), und dem Ziel bezahlbaren Wohnens. Schwerer wiegt für mich das Wohnen, weil es alle Einwohner betrifft und Verdrängung kaum rückgängig zu machen ist.",
+  muster:"Ich bewerte den Beschluss vor allem am Maßstab sozialer Gerechtigkeit, da Wohnen eine Daseinsgrundfunktion ist; ergänzend berücksichtige ich die wirtschaftlichen Folgen. Für die Entscheidung spricht, dass bis zu 10 000 Wohnungen auf den regulären Mietmarkt zurückkehren könnten (M2), während die Mieten in zehn Jahren um rund 68 % gestiegen sind (M1). Zudem reagiert die Stadt auf breiten Protest der Bevölkerung (M4). Dagegen spricht, dass private Vermieter Einnahmen verlieren und den Eingriff als Enteignung sehen (M3). Außerdem ist offen, ob die Wohnungen tatsächlich bezahlbar an Einheimische vermietet werden (M3), und Kreuzfahrt- sowie Tagesgäste bleiben unberührt (M2). Es besteht also ein Zielkonflikt zwischen den Einnahmen aus dem Tourismus, der etwa 14 % der Wirtschaftsleistung trägt (M1), und dem Ziel bezahlbaren Wohnens. Schwerer wiegt für mich das Wohnen, weil es alle Einwohner betrifft und Verdrängung kaum rückgängig zu machen ist. Insgesamt halte ich die Entscheidung für überwiegend angemessen, sofern die Stadt die frei werdenden Wohnungen mit Mietbindungen versieht und auch den Tagestourismus steuert.",
+  erw:["Wertmaßstab offengelegt (z. B. soziale Gerechtigkeit, Recht auf Wohnen)","Positionen von Anwohnern, Vermietern und Tourismusbranche berücksichtigt","Grenzen der Maßnahme erkannt (Tagesgäste, unsichere Wirkung)","Zielkonflikt Tourismuseinnahmen – Wohnraum gewichtet","Werturteil mit Bedingung"]
+},
+{ id:"gruenheide", place:"Grünheide, Brandenburg", title:"Autowerk im Kiefernwald", op:"beurteilen",
+  frage:"Beurteile die Ansiedlung des Tesla-Werks in Grünheide unter dem Gesichtspunkt einer nachhaltigen Regionalentwicklung.",
+  subj:"die Ansiedlung des Werks", adj:"für die Region nachhaltig", poles:["nicht nachhaltig","nachhaltig"],
+  akteure:["Unternehmen","Beschäftigte und Pendler","Gemeinde Grünheide","Wasserverband","Umweltverbände","Landesregierung"],
+  mats:[
+    ["M1","Das Werk","Seit 2022 baut Tesla in Grünheide südöstlich von Berlin Elektroautos, die als Baustein der Verkehrswende gelten. Rund 11 000 Menschen arbeiten dort (2024). Das Werksgelände umfasst rund 300 Hektar ehemaligen Kiefernforst.","nach Unternehmensangaben und Presseberichten, gerundet"],
+    ["M2","Wasser","Teile des Geländes liegen in einem Wasserschutzgebiet. Brandenburg zählt zu den niederschlagsärmsten Bundesländern. Der Wasserverband hat dem Werk eine begrenzte Wassermenge zugesagt und warnt, dass für neue Wohngebiete und Betriebe in der Region kaum noch Wasser zur Verfügung steht.","nach Wasserverband Strausberg-Erkner, vereinfacht"],
+    ["M3","Bürgerbefragung","Im Februar 2024 stimmten in einer nicht bindenden Befragung rund 62 % der teilnehmenden Grünheider gegen eine Erweiterung des Geländes, für die weiterer Wald gerodet werden sollte. Im Mai 2024 beschloss die Gemeindevertretung einen verkleinerten Bebauungsplan.","nach Gemeinde Grünheide und Presseberichten"],
+    ["M4","Die Region","Zulieferer und Logistikfirmen siedeln sich an, Wohnraum im Umland wird knapper und teurer. Viele Beschäftigte pendeln aus Berlin und Polen ein; der Ausbau von Bahn und Straßen hinkt hinterher.","eigene Zusammenstellung"]
+  ],
+  args:{
+    w:[["pro","Rund 11 000 Arbeitsplätze und neue Zulieferer lösen einen Multiplikatoreffekt in der Region aus.","M1, M4"],["contra","Die Region wird stark von einem einzigen Großunternehmen abhängig.","M1"]],
+    u:[["contra","Hoher Wasserbedarf in einem trockenen Raum und teils im Wasserschutzgebiet gefährdet das Grundwasser.","M2"],["pro","Elektroautos können als Baustein der Verkehrswende Emissionen im Verkehr senken.","M1"]],
+    g:[["contra","Steigende Wohnkosten und mehr Pendelverkehr belasten die Bevölkerung.","M4"],["pro","Industriearbeitsplätze bieten Beschäftigung für Menschen aus der ganzen Region.","M4"]],
+    p:[["pro","Die Gemeinde begrenzt die Erweiterung über die Bauleitplanung.","M3"],["contra","Die Mehrheit in der Befragung lehnte eine Erweiterung ab; die Akzeptanz ist begrenzt.","M3"]]
+  },
+  konflikt:"Es besteht ein Zielkonflikt zwischen wirtschaftlicher Entwicklung (Arbeitsplätze, M1) und Ressourcenschonung (Wasser, Wald, M2). Da Wasser in der Region knapp und nicht ersetzbar ist und es weitere Entwicklung begrenzt, wiegt dieser Konflikt schwer.",
+  muster:"Ich beurteile die Ansiedlung danach, ob sie die Region wirtschaftlich stärkt, ohne ihre natürlichen Grundlagen und die Lebensqualität dauerhaft zu belasten. Wirtschaftlich ist die Ansiedlung ein Erfolg: Rund 11 000 Arbeitsplätze (M1) und neue Zulieferer (M4) lösen einen Multiplikatoreffekt aus. Ökologisch ist sie dagegen kritisch zu sehen, denn das Werk liegt teilweise in einem Wasserschutzgebiet in einem der niederschlagsärmsten Bundesländer, und der Wasserverband sieht kaum Reserven für weitere Entwicklung (M2). Zudem wurde Kiefernforst gerodet (M1). Sozial stehen neue Industriearbeitsplätze steigenden Wohnkosten und mehr Pendelverkehr gegenüber (M4). Politisch zeigt die Bürgerbefragung von 2024, dass die Akzeptanz begrenzt ist (M3). Es besteht ein Zielkonflikt zwischen Wirtschaftswachstum und Ressourcenschonung; da Wasser in der Region knapp und nicht ersetzbar ist, wiegt er schwer. Insgesamt trägt die Ansiedlung nur teilweise zu einer nachhaltigen Regionalentwicklung bei. Positiver fiele das Urteil aus, wenn der Wasserverbrauch weiter sinkt, die Erweiterung begrenzt bleibt und Bahn- und Wohnungsbau Schritt halten.",
+  erw:["Kriterium nachhaltige Regionalentwicklung erläutert","Arbeitsplätze und Multiplikatoreffekt mit Materialbezug","Wasser und Wald als begrenzende Ressourcen","Akzeptanz und Bauleitplanung (M3) einbezogen","Differenziertes Sachurteil mit Bedingungen"]
+},
+{ id:"atacama", place:"Salar de Atacama, Chile", title:"Lithium aus der Wüste", op:"bewerten",
+  frage:"Bewerte, ob der Ausbau des Lithiumabbaus im Salar de Atacama mit einer nachhaltigen Entwicklung vereinbar ist.",
+  subj:"der Ausbau des Lithiumabbaus", adj:"nachhaltig", poles:["nicht nachhaltig","nachhaltig"],
+  akteure:["Bergbauunternehmen","Staat Chile","indigene Gemeinden","Autoindustrie in Europa und China","Umweltverbände","Käufer von E-Autos"],
+  mats:[
+    ["M1","Rohstoff der Energiewende","Lithium wird vor allem für Batterien von Elektroautos und Stromspeichern gebraucht; die weltweite Nachfrage soll sich bis 2030 vervielfachen. Chile ist nach Australien der zweitgrößte Produzent, ein großer Teil stammt aus dem Salar de Atacama.","nach IEA und USGS, vereinfacht"],
+    ["M2","Gewinnung","Salzhaltiges Grundwasser (Sole) wird aus dem Untergrund gepumpt und in großen Becken verdunstet. Die Atacama gehört zu den trockensten Wüsten der Erde. Studien zeigen sinkende Grundwasserstände; Lagunen und Flamingo-Bestände werden beobachtet, die Ursachen sind teils umstritten.","eigene Zusammenstellung"],
+    ["M3","Die Menschen","In den Oasen am Salzsee leben indigene Gemeinschaften der Lickanantay (Atacameños). Sie leben von Landwirtschaft und Tourismus und fordern Mitsprache beim Abbau. Ein Teil der Bergbaueinnahmen fließt als Abgaben an die Gemeinden.","eigene Zusammenstellung"],
+    ["M4","Staatliche Strategie","2023 legte Chiles Regierung eine nationale Lithiumstrategie vor: Der Staat soll über das Staatsunternehmen Codelco die Mehrheit an wichtigen Abbauprojekten halten, und mehr Wertschöpfung soll im Land bleiben, z. B. durch Batteriefertigung. Neue Verfahren (direkte Lithiumextraktion) sollen weniger Wasser verdunsten lassen.","nach Regierung Chiles, vereinfacht"]
+  ],
+  args:{
+    u:[["pro","Lithium ermöglicht Elektromobilität und Stromspeicher und damit globalen Klimaschutz.","M1"],["contra","Die Wasserentnahme in einer extremen Trockenregion gefährdet Grundwasser, Lagunen und Tierwelt.","M2"]],
+    w:[["pro","Hohe Exporterlöse und die staatliche Mehrheit sichern Chile Einnahmen.","M1, M4"],["contra","Solange die Weiterverarbeitung im Ausland stattfindet, bleibt Chile vom Rohstoffexport abhängig.","M4"]],
+    g:[["contra","Indigene Gemeinden tragen die Folgen der Wasserknappheit und fordern Mitsprache.","M3"],["pro","Abgaben an die Gemeinden finanzieren lokale Infrastruktur.","M3"]],
+    p:[["pro","Die Lithiumstrategie will Kontrolle und Wertschöpfung im Land halten.","M4"],["contra","Die Mitsprache der indigenen Bevölkerung ist nicht gesichert.","M3"]]
+  },
+  konflikt:"Hier zeigt sich ein Zielkonflikt zwischen den Handlungsebenen: Der Nutzen für den Klimaschutz entsteht global (M1), die Kosten für Wasser und Lebensgrundlagen trägt die lokale Bevölkerung (M2, M3). Weil Wasser in der Atacama nicht ersetzbar ist und die Betroffenen wenig Einfluss haben, wiegt der lokale Schaden schwer.",
+  muster:"Ich bewerte den Lithiumabbau nach den Dimensionen der Nachhaltigkeit und beziehe dabei bewusst zwei Handlungsebenen ein: den globalen Klimaschutz und die lokalen Lebensgrundlagen am Salzsee. Global spricht für den Ausbau, dass Lithium für Batterien und damit für Elektromobilität und Stromspeicher gebraucht wird (M1). Wirtschaftlich sichert der Abbau Chile hohe Einnahmen, und die staatliche Strategie will mehr Wertschöpfung im Land halten (M4). Lokal dagegen wird in einer der trockensten Wüsten der Erde Sole verdunstet; sinkende Grundwasserstände gefährden Lagunen und Landwirtschaft (M2). Die indigenen Lickanantay tragen diese Lasten und fordern Mitsprache (M3). Hier zeigt sich ein Zielkonflikt zwischen globalem Klimaschutz und lokalem Ressourcenschutz: Der Nutzen entsteht weltweit, die Kosten vor Ort. Weil Wasser in der Atacama nicht ersetzbar ist und die Betroffenen kaum Einfluss haben, wiegt der lokale Schaden für mich schwer. Insgesamt ist der Ausbau nur teilweise nachhaltig. Vertretbar wäre er, wenn wassersparende Verfahren verbindlich werden (M4), die Gemeinden mitentscheiden und die Abnehmerländer faire Standards mittragen.",
+  erw:["Wertmaßstab offengelegt, Maßstabsebenen global – lokal unterschieden","Ökologische Folgen vor Ort und Nutzen für Klimaschutz mit Materialbezug","Perspektive der indigenen Gemeinden und Dependenz-Aspekt","Zielkonflikt zwischen Handlungsebenen gewichtet","Werturteil mit Bedingungen"]
+},
+{ id:"paris", place:"Paris, Frankreich", title:"Dreifache Parkgebühr für SUV", op:"bewerten",
+  frage:"Bewerte die Entscheidung der Stadt Paris, die Parkgebühren für schwere Autos von Auswärtigen zu verdreifachen.",
+  subj:"die höhere Parkgebühr für schwere Autos", adj:"sinnvoll", poles:["nicht sinnvoll","sinnvoll"],
+  akteure:["Pariser Einwohner","Pendler aus dem Umland","Familien","Einzelhandel","Stadtregierung","Fuß- und Radverkehr"],
+  mats:[
+    ["M1","Der Beschluss","In einer Bürgerbefragung im Februar 2024 stimmten rund 55 % der Teilnehmenden für höhere Parkgebühren für schwere Autos; die Beteiligung lag bei etwa 6 %. Seit Oktober 2024 zahlen Auswärtige für Verbrenner und Hybride über 1,6 t sowie Elektroautos über 2 t im Zentrum 18 € statt 6 € pro Stunde. Anwohner sind ausgenommen.","nach Stadt Paris und Presseberichten, gerundet"],
+    ["M2","Platz und Sicherheit","SUV sind größer und schwerer als Kleinwagen. Sie beanspruchen mehr Parkraum, verbrauchen mehr Energie und gefährden Fußgänger bei Unfällen stärker. Ihr Anteil an den Neuwagen in Frankreich ist stark gestiegen.","eigene Zusammenstellung"],
+    ["M3","Verkehr in Paris","Seit Jahren baut Paris Radwege aus, sperrt Straßen für Autos und reduziert Parkplätze. Innerhalb von Paris wird nur ein kleiner Teil der Wege mit dem Auto zurückgelegt; viele Autofahrer kommen aus dem Umland, wo Bus und Bahn schlechter ausgebaut sind.","eigene Zusammenstellung"],
+    ["M4","Stimmen","Autofahrerverband: „Das trifft Familien aus den Vororten, die auf ein großes Auto angewiesen sind.“ – Radfahrerverband: „Endlich zahlen die, die am meisten Platz verbrauchen.“ – Einzelhändler: „Kunden aus dem Umland bleiben weg.“","typische Positionen, vereinfacht"]
+  ],
+  args:{
+    u:[["pro","Weniger schwere Autos senken Energieverbrauch, Emissionen und Flächenverbrauch.","M2"],["contra","Leichtere Autos und Anwohner sind ausgenommen; die Wirkung auf den Gesamtverkehr bleibt begrenzt.","M1"]],
+    w:[["contra","Der Einzelhandel fürchtet Kundenverluste aus dem Umland.","M4"],["pro","Knapper Parkraum wird nach Flächenverbrauch bepreist; die Stadt erzielt Einnahmen.","M1, M2"]],
+    g:[["pro","Mehr Sicherheit für Fußgänger und Radfahrende.","M2"],["contra","Die Maßnahme trifft Menschen aus dem Umland mit schlechtem Nahverkehr stärker als Innenstadtbewohner.","M3, M4"]],
+    p:[["pro","Die Maßnahme ist durch eine Bürgerbefragung legitimiert.","M1"],["contra","Nur etwa 6 % beteiligten sich, und die Betroffenen aus dem Umland durften nicht abstimmen.","M1, M3"]]
+  },
+  konflikt:"Es besteht ein Zielkonflikt zwischen der Lebensqualität und Sicherheit in der Innenstadt (M2) und der Erreichbarkeit der Stadt für Menschen aus dem Umland (M3, M4). Gerecht wird die Maßnahme nur, wenn es für Pendler gute Alternativen gibt.",
+  muster:"Ich bewerte die Maßnahme an den Maßstäben Lebensqualität und Sicherheit in der Stadt sowie Gerechtigkeit zwischen Stadt und Umland. Für die höheren Gebühren spricht, dass schwere Autos mehr knappen Stadtraum beanspruchen und Fußgänger bei Unfällen stärker gefährden (M2); wer mehr Platz verbraucht, zahlt mehr. Die Maßnahme passt zudem zur Verkehrswende mit mehr Radwegen (M3). Dagegen spricht, dass vor allem Menschen aus dem Umland betroffen sind, wo Bus und Bahn schlechter ausgebaut sind, während Anwohner ausgenommen bleiben (M1, M3). Der Einzelhandel fürchtet, Kunden zu verlieren (M4). Politisch ist die Legitimation schwach: Nur rund 6 % beteiligten sich, und die Betroffenen aus dem Umland durften nicht abstimmen (M1). Es besteht damit ein Zielkonflikt zwischen der Lebensqualität in der Innenstadt und der Erreichbarkeit für das Umland. Ich halte die Maßnahme für überwiegend sinnvoll, weil sie gezielt am Flächenverbrauch ansetzt. Gerecht wird sie aber nur, wenn die Stadt die Einnahmen in Park-and-Ride-Plätze und den Nahverkehr ins Umland investiert.",
+  erw:["Wertmaßstäbe offengelegt (Lebensqualität, Sicherheit, Gerechtigkeit Stadt – Umland)","Argumente aus mehreren Dimensionen mit Materialbezug","Legitimation der Befragung kritisch geprüft","Zielkonflikt Innenstadt – Umland gewichtet","Werturteil mit Handlungsempfehlung"]
+}
+];
+
+const REPAIR = [
+{ id:"r1", fall:"barcelona", titel:"Ferienwohnungen in Barcelona",
+  text:"Ich finde das Verbot von Ferienwohnungen richtig gut, weil Touristen einfach nerven und die Leute zu Recht protestieren. Deshalb ist das eine super Maßnahme.",
+  flaws:["mass","beleg","mehr","abw","einschr","sprache"],
+  besser:"Ich bewerte das Auslaufen der Lizenzen am Maßstab sozialer Gerechtigkeit, weil Wohnen eine Daseinsgrundfunktion ist. Für die Maßnahme spricht, dass bis zu 10 000 Wohnungen auf den Mietmarkt zurückkehren könnten (M2), während die Mieten um rund 68 % gestiegen sind (M1). Dagegen verlieren private Vermieter Einnahmen (M3). Zwischen Tourismuseinnahmen und bezahlbarem Wohnen besteht ein Zielkonflikt; schwerer wiegt für mich das Wohnen. Insgesamt halte ich die Entscheidung für überwiegend angemessen, sofern die Wohnungen tatsächlich bezahlbar vermietet werden."
+},
+{ id:"r2", fall:"ostsee", titel:"Windparks in der Ostsee",
+  text:"Für Windparks spricht der Klimaschutz (M1). Dagegen spricht der Schweinswal (M3). Für die Windparks sprechen die Arbeitsplätze (M2). Dagegen sprechen die Kosten für das Netz (M4). Es gibt also Vor- und Nachteile.",
+  flaws:["mass","abw","urteil","einschr"],
+  besser:"Ich bewerte den Ausbau nach den Dimensionen der Nachhaltigkeit und gewichte den Klimaschutz besonders, weil seine Folgen kaum umkehrbar sind. Für die Windparks spricht, dass sie emissionsfreien Strom liefern (M1) und an der Küste Arbeitsplätze schaffen (M2). Dagegen gefährdet der Baulärm den Schweinswal (M3), und der Netzausbau verursacht Kosten (M4). Klimaschutz und Artenschutz stehen hier im Konflikt; schwerer wiegt für mich der Klimaschutz. Insgesamt ist der Ausbau überwiegend nachhaltig, sofern Schallschutz und Schutzgebiete konsequent beachtet werden."
+},
+{ id:"r3", fall:"atacama", titel:"Lithium in der Atacama",
+  text:"Nach den Dimensionen der Nachhaltigkeit ist der Lithiumabbau nicht nachhaltig, denn er verbraucht viel Wasser in der Wüste (M2). Der Lithiumabbau ist daher abzulehnen.",
+  flaws:["mehr","abw","einschr"],
+  besser:"Nach den Dimensionen der Nachhaltigkeit ist der Lithiumabbau nur teilweise nachhaltig. Zwar wird Lithium für Batterien und damit für den globalen Klimaschutz gebraucht (M1) und bringt Chile Einnahmen (M4). Lokal aber gefährdet die Verdunstung von Sole in einer extremen Trockenregion Grundwasser und Lebensgrundlagen der indigenen Gemeinden (M2, M3). Der Nutzen entsteht global, die Kosten vor Ort; weil Wasser dort nicht ersetzbar ist, wiegt der lokale Schaden schwer. Vertretbar wäre der Ausbau nur mit wassersparenden Verfahren und echter Mitsprache der Gemeinden."
+}
+];
+
+const BAUSTEINE = [
+  ["Einleitung", ["Im Folgenden bewerte ich, ob …","Im Folgenden beurteile ich, inwieweit …","Die Frage, ob …, lässt sich nicht pauschal beantworten."]],
+  ["Maßstab offenlegen", ["Als Maßstab lege ich … zugrunde, weil …","Ich beurteile … vor allem nach dem Kriterium …","Besonders schwer wiegt für mich, ob …, da …","Dabei berücksichtige ich sowohl die lokale als auch die globale Ebene."]],
+  ["Argument einführen", ["Für … spricht aus ökologischer Sicht, dass …","Ein weiteres Argument ist, dass …","Hinzu kommt, dass …","Dies zeigt sich daran, dass … (M2)."]],
+  ["Gegenargument", ["Dagegen spricht jedoch, dass …","Dem steht entgegen, dass …","Kritisch ist allerdings zu sehen, dass …","Zwar …, aber …"]],
+  ["Zielkonflikt und Gewichtung", ["Zwischen … und … besteht ein Zielkonflikt: …","Hier stehen ökonomische Interessen im Widerspruch zu …","Schwerer wiegt meines Erachtens …, weil …","Entscheidend ist für mich …, da die Folgen langfristig und kaum umkehrbar sind."]],
+  ["Urteil", ["Insgesamt komme ich zu dem Urteil, dass …","Abwägend halte ich … für überwiegend …","Aus den genannten Gründen ist … nur bedingt …","Folglich ist … aus meiner Sicht abzulehnen, weil …"]],
+  ["Einschränkung", ["Dieses Urteil gilt allerdings nur, sofern …","Anders fiele das Urteil aus, wenn …","Offen bleibt jedoch, ob …"]],
+  ["Handlungsempfehlung", ["Sinnvoll wäre daher, …","Um … zu erreichen, sollte …","Eine Lösung des Konflikts könnte darin bestehen, dass …"]],
+  ["Verbindungswörter", ["folglich","demgegenüber","insofern","daher","dennoch","außerdem","einerseits … andererseits","nicht nur … sondern auch"]]
+];
+/* ---------- Speicher ---------- */
+const KEY = "geo-urteilswerkstatt-v1";
+let W = { c:{}, r:{} };
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.c) W = s; } catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(W)); } catch(e) {} }
+function blank(){ return { step:1, opq:null, gegen:"", dims:[], ebenen:[], zeit:[], persp:[], mass:"", args:{}, ka:"", kb:"", kt:"", pos:0, text:"", checks:[], muster:false, maxStep:1 }; }
+function D(id){ if (!W.c[id]) W.c[id] = blank(); return W.c[id]; }
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dc = k => `var(--d-${k})`;
+const words = s => (s.trim().match(/\S+/g) || []).length;
+const STEPN = ["Frage","Maßstäbe","Argumente","Abwägen","Urteil"];
+let cur = "faelle", hlp = {};
+
+function route(){
+  const h = location.hash.slice(1);
+  cur = ["faelle","schema","formulieren","reparieren"].includes(h) || CASES.some(c => "fall-" + c.id === h) ? h : "faelle";
+  document.querySelectorAll(".tab").forEach(a => a.setAttribute("aria-current", (a.dataset.r === cur || (cur.startsWith("fall-") && a.dataset.r === "faelle")) ? "page" : "false"));
+  if (cur.startsWith("fall-")) vFall(CASES.find(c => "fall-" + c.id === cur));
+  else ({ faelle:vStart, schema:vSchema, formulieren:vForm, reparieren:vRep })[cur]();
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+
+function insertAt(ta, str){
+  const s = ta.selectionStart ?? ta.value.length, e = ta.selectionEnd ?? s;
+  const before = ta.value.slice(0, s), sp = before && !/\s$/.test(before) ? " " : "";
+  ta.value = before + sp + str + ta.value.slice(e);
+  const p = s + sp.length + str.length; ta.focus(); ta.setSelectionRange(p, p);
+  ta.dispatchEvent(new Event("input", { bubbles:true }));
+}
+async function copyText(txt, btn){
+  let ok = false;
+  try { await navigator.clipboard.writeText(txt); ok = true; } catch(e) {}
+  if (!ok) { const t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t); t.select(); try { ok = document.execCommand("copy"); } catch(e) {} t.remove(); }
+  if (btn) { const o = btn.textContent; btn.textContent = ok ? "Kopiert" : "Bitte markieren und kopieren"; setTimeout(() => btn.textContent = o, 1600); }
+}
+
+/* ---------- Start ---------- */
+function vStart(){
+  $("view").innerHTML = `
+  <section class="hero"><h1>Urteilen üben</h1>
+    <p>Sechs Fälle mit Material, ein Schreibplan in fünf Schritten und Formulierungshilfen für die Operatoren <b>beurteilen</b> und <b>bewerten</b> (Anforderungsbereich III).</p></section>
+  <ol class="steps">
+    <li><b>Frage klären</b><span>Operator, Gegenstand, für wen?</span></li>
+    <li><b>Maßstäbe offenlegen</b><span>Dimensionen, Ebenen, Zeit, Perspektiven</span></li>
+    <li><b>Argumentieren</b><span>Pro und Contra mit Materialbeleg</span></li>
+    <li><b>Abwägen</b><span>Zielkonflikt benennen und gewichten</span></li>
+    <li><b>Urteilen</b><span>Position, Einschränkung, Empfehlung</span></li>
+  </ol>
+  <section class="cases">${CASES.map(c => {
+    const d = W.c[c.id], st = d ? d.maxStep : 0, done = d && words(d.text) > 60;
+    return `<a class="case" href="#fall-${c.id}">
+      <div class="spread"><span class="pl">${esc(c.place)}</span><span class="badge ${c.op}">${c.op}</span></div>
+      <h3>${esc(c.title)}</h3><p class="q">${esc(c.frage)}</p>
+      <div class="meter" aria-label="Fortschritt">${[1,2,3,4,5].map(i => `<i class="${st >= i ? "on" : ""}"></i>`).join("")}</div>
+      <span class="note">${!d ? "Noch nicht begonnen" : done ? `Urteil geschrieben · ${words(d.text)} Wörter` : `Bei Schritt ${d.step}: ${STEPN[d.step - 1]}`}</span></a>`;
+  }).join("")}</section>
+  <p class="note">Deine Eingaben werden nur in diesem Browser gespeichert. Für die Abgabe kopierst du dein Urteil am Ende in eine Mail oder ein Dokument.</p>`;
+}
+
+/* ---------- Fall ---------- */
+function matsHTML(c){
+  return `<div class="mats">${c.mats.map(m => `<div class="mat"><div class="mh"><b>${m[0]}</b><span>${esc(m[1])}</span></div><p>${esc(m[2])}</p><span class="src">Quelle: ${esc(m[3])}</span></div>`).join("")}</div>`;
+}
+function vFall(c){
+  const d = D(c.id); save();
+  $("view").innerHTML = `
+  <div class="fall-head"><div class="row"><a class="linkbtn" href="#faelle">← Alle Fälle</a></div>
+    <div class="row"><span class="badge ${c.op}">${c.op}</span><span class="mono" style="color:var(--ochre)">${esc(c.place)}</span></div>
+    <h1>${esc(c.title)}</h1><p class="frage">${esc(c.frage)}</p></div>
+  <div class="fall-grid">
+    <aside class="side">${matsHTML(c)}</aside>
+    <div class="work">
+      <details class="matbox"><summary>Material M1–M4 anzeigen</summary>${matsHTML(c)}</details>
+      <nav class="stepper" aria-label="Schritte">${STEPN.map((n, i) => `<button data-s="${i + 1}" class="${d.maxStep > i + 1 ? "done" : ""}" ${d.step === i + 1 ? 'aria-current="step"' : ""}><b>${i + 1}</b>${n}</button>`).join("")}</nav>
+      <section class="panel" id="stepbox"></section>
+    </div>
+  </div>`;
+  document.querySelectorAll(".stepper button").forEach(b => b.onclick = () => go(c, +b.dataset.s));
+  ({1:s1, 2:s2, 3:s3, 4:s4, 5:s5})[d.step](c, d);
+}
+function go(c, s){ const d = D(c.id); d.step = s; d.maxStep = Math.max(d.maxStep, s); save(); vFall(c); window.scrollTo(0, 0); }
+function nav(c, d){
+  return `<div class="navrow">${d.step > 1 ? `<button class="btn ghost" id="prev">← Zurück</button>` : "<span></span>"}${d.step < 5 ? `<button class="btn" id="next">Weiter: ${STEPN[d.step]} →</button>` : ""}</div>`;
+}
+function bindNav(c, d){
+  if ($("prev")) $("prev").onclick = () => go(c, d.step - 1);
+  if ($("next")) $("next").onclick = () => go(c, d.step + 1);
+}
+function bindField(id, d, key){ const el = $(id); if (el) el.oninput = () => { d[key] = el.value; save(); }; }
+function insChips(list, target){ return `<div class="row">${list.map(t => `<button class="ins" data-t="${esc(target)}" data-v="${esc(t)}">${esc(t)}</button>`).join("")}</div>`; }
+function bindIns(){ document.querySelectorAll(".ins").forEach(b => b.onclick = () => insertAt($(b.dataset.t), b.dataset.v)); }
+
+/* Schritt 1 */
+function s1(c, d){
+  const right = c.op === "beurteilen" ? 0 : 1, ans = d.opq;
+  $("stepbox").innerHTML = `<h2>1 · Frage klären</h2>
+  <div class="fb info"><b>Operator: ${c.op}</b><span>${esc(OPS[c.op])}</span></div>
+  <div><p class="lab" style="font-weight:700;margin-bottom:6px">Was verlangt der Operator in dieser Aufgabe?</p>
+    <div class="opts">${OPQ.map((o, i) => `<button class="opt ${ans === null ? "" : i === right ? "right" : (i === ans ? "wrong" : "")}" data-i="${i}">${esc(o)}</button>`).join("")}</div></div>
+  ${ans === null ? "" : `<div class="fb ${ans === right ? "ok" : "no"}">${ans === right ? "Richtig." : "Nicht ganz."} ${c.op === "bewerten" ? "Beim Bewerten fällst du ein Werturteil und machst deine Wertmaßstäbe sichtbar." : "Beim Beurteilen fällst du ein Sachurteil und nennst die fachlichen Kriterien, nach denen du prüfst."}</div>`}
+  <div><label class="lab" for="gegen">Worüber genau urteilst du? Nenne Maßnahme, Raum und wer betroffen ist.</label>
+    <textarea id="gegen" placeholder="Ich urteile über …">${esc(d.gegen)}</textarea></div>
+  ${nav(c, d)}`;
+  document.querySelectorAll(".opt").forEach(b => b.onclick = () => { d.opq = +b.dataset.i; save(); s1(c, d); });
+  bindField("gegen", d, "gegen"); bindNav(c, d);
+}
+
+/* Schritt 2 */
+function toggle(arr, v){ const i = arr.indexOf(v); i < 0 ? arr.push(v) : arr.splice(i, 1); }
+function s2(c, d){
+  const chips = (list, key, col) => `<div class="chipset">${list.map(v => `<button class="chip" data-k="${key}" data-v="${esc(v)}" aria-pressed="${d[key].includes(v)}">${col ? `<span class="dot" style="background:${dc(v)}"></span>${DIMS[v].name}` : esc(v)}</button>`).join("")}</div>`;
+  $("stepbox").innerHTML = `<h2>2 · Maßstäbe offenlegen</h2>
+  <p class="muted">Lege fest, wonach du urteilst. Ein Urteil ohne offengelegten Maßstab ist nur eine Meinung.</p>
+  <div><p class="lab" style="font-weight:700;margin-bottom:6px">Dimensionen nachhaltiger Entwicklung <span class="note">(mindestens zwei)</span></p>${chips(Object.keys(DIMS), "dims", true)}</div>
+  <div><p class="lab" style="font-weight:700;margin-bottom:6px">Handlungsebenen</p>${chips(EBENEN, "ebenen")}</div>
+  <div><p class="lab" style="font-weight:700;margin-bottom:6px">Zeit</p>${chips(ZEIT, "zeit")}</div>
+  <div><p class="lab" style="font-weight:700;margin-bottom:6px">Perspektiven: Wer ist betroffen?</p>${chips(c.akteure, "persp")}</div>
+  <div><label class="lab" for="mass">Dein wichtigster Maßstab und warum</label>
+    ${insChips(["Als wichtigsten Maßstab lege ich … zugrunde, weil …","Besonders schwer wiegt für mich, ob …, da …","Ich beurteile vor allem nach dem Kriterium …"], "mass")}
+    <textarea id="mass" style="margin-top:8px">${esc(d.mass)}</textarea></div>
+  ${d.dims.length < 2 ? `<p class="fb info">Wähle mindestens zwei Dimensionen, damit dein Urteil mehrperspektivisch wird.</p>` : ""}
+  ${nav(c, d)}`;
+  document.querySelectorAll(".chip").forEach(b => b.onclick = () => { toggle(d[b.dataset.k], b.dataset.v); if (b.dataset.k === "dims") d.dims.sort((a, b) => "uwgp".indexOf(a) - "uwgp".indexOf(b)); save(); s2(c, d); });
+  bindField("mass", d, "mass"); bindIns(); bindNav(c, d);
+}
+
+/* Schritt 3 */
+function s3(c, d){
+  if (!d.dims.length) { $("stepbox").innerHTML = `<h2>3 · Argumentieren</h2><p class="fb info">Wähle zuerst in Schritt 2 mindestens zwei Dimensionen.</p>${nav(c, d)}`; bindNav(c, d); return; }
+  d.dims.forEach(k => { if (!d.args[k] || !d.args[k].length) d.args[k] = [{ side:"pro", t:"", m:"", w:2 }]; });
+  const mopts = sel => `<option value="">Beleg</option>` + c.mats.map(m => `<option ${sel === m[0] ? "selected" : ""}>${m[0]}</option>`).join("");
+  $("stepbox").innerHTML = `<h2>3 · Argumentieren</h2>
+  <p class="muted">Sammle je Dimension Argumente dafür und dagegen. Belege jedes mit dem Material und gib an, wie stark es wiegt.</p>
+  ${d.dims.map(k => {
+    const h = hlp[c.id + k] || 0;
+    return `<div class="dimcard"><h3><span class="dot" style="background:${dc(k)}"></span>${DIMS[k].name}</h3>
+    ${d.args[k].map((a, i) => `<div class="arg">
+      <div class="ctl">
+        <div class="seg pc">${["pro","contra"].map(v => `<button data-a="side" data-k="${k}" data-i="${i}" data-v="${v}" aria-pressed="${a.side === v}">${v === "pro" ? "Pro" : "Contra"}</button>`).join("")}</div>
+        <select class="m" data-a="m" data-k="${k}" data-i="${i}" aria-label="Materialbeleg">${mopts(a.m)}</select>
+        <div class="wrow"><span class="note">Gewicht</span><div class="seg" role="group" aria-label="Gewicht">${[1,2,3].map(v => `<button data-a="w" data-k="${k}" data-i="${i}" data-v="${v}" aria-pressed="${a.w === v}" title="${["gering","mittel","hoch"][v - 1]}">${v}</button>`).join("")}</div></div>
+        <button class="linkbtn" data-a="del" data-k="${k}" data-i="${i}" style="color:var(--bad);justify-self:end">Entfernen</button>
+      </div>
+      <textarea id="a-${k}-${i}" data-k="${k}" data-i="${i}" class="argt" placeholder="Argument formulieren …" style="min-height:64px">${esc(a.t)}</textarea>
+    </div>`).join("")}
+    <div class="help"><button class="btn ghost small" data-a="add" data-k="${k}">+ Argument</button>
+      <button class="btn ghost small" data-a="help" data-k="${k}">${h === 0 ? "Hilfe 1: Leitfrage" : h === 1 ? "Hilfe 2: Satzanfang" : h === 2 ? "Hilfe 3: Beispielargumente" : "Hilfen ausblenden"}</button></div>
+    ${h >= 1 ? `<div class="hint"><span><b>Leitfrage:</b> ${esc(LEIT[k])}</span>
+      ${h >= 2 ? `<span><b>Satzanfang:</b> <button class="ins" data-t="a-${k}-${d.args[k].length - 1}" data-v="${esc(ANFANG[k])}">${esc(ANFANG[k])}</button></span>` : ""}
+      ${h >= 3 ? `<span><b>Beispiele aus dem Material:</b></span>${c.args[k].map(a => `<span><span class="pc-${a[0]}">${a[0] === "pro" ? "Pro" : "Contra"}:</span> ${esc(a[1])} (${a[2]})</span>`).join("")}` : ""}
+    </div>` : ""}</div>`;
+  }).join("")}
+  ${nav(c, d)}`;
+  document.querySelectorAll(".argt").forEach(t => t.oninput = () => { d.args[t.dataset.k][+t.dataset.i].t = t.value; save(); });
+  document.querySelectorAll("[data-a]").forEach(b => {
+    const k = b.dataset.k, i = +b.dataset.i, a = b.dataset.a;
+    if (a === "m") b.onchange = () => { d.args[k][i].m = b.value; save(); };
+    else b.onclick = () => {
+      if (a === "side") d.args[k][i].side = b.dataset.v;
+      if (a === "w") d.args[k][i].w = +b.dataset.v;
+      if (a === "del") d.args[k].splice(i, 1);
+      if (a === "add") d.args[k].push({ side:"contra", t:"", m:"", w:2 });
+      if (a === "help") hlp[c.id + k] = ((hlp[c.id + k] || 0) + 1) % 4;
+      save(); s3(c, d);
+    };
+  });
+  bindIns(); bindNav(c, d);
+}
+
+/* Schritt 4 */
+function allArgs(d){ const out = []; d.dims.forEach(k => (d.args[k] || []).forEach(a => { if (a.t.trim()) out.push(Object.assign({ k }, a)); })); return out.sort((a, b) => b.w - a.w); }
+function s4(c, d){
+  const list = allArgs(d), h = hlp[c.id + "k"] || 0;
+  const dimSel = (id, v) => `<select id="${id}"><option value="">Dimension wählen</option>${Object.keys(DIMS).map(k => `<option value="${k}" ${v === k ? "selected" : ""}>${DIMS[k].name}</option>`).join("")}</select>`;
+  $("stepbox").innerHTML = `<h2>4 · Abwägen</h2>
+  <p class="muted">Hier entscheidet sich die Qualität deines Urteils: Welche Ziele widersprechen sich, und was wiegt schwerer?</p>
+  ${list.length ? `<div class="tw"><table class="raster"><thead><tr><th>Dimension</th><th></th><th>Argument</th><th>Beleg</th><th>Gewicht</th></tr></thead><tbody>
+    ${list.map(a => `<tr><td><span class="dot" style="background:${dc(a.k)}"></span> ${DIMS[a.k].name}</td><td class="pc-${a.side}">${a.side === "pro" ? "Pro" : "Contra"}</td><td>${esc(a.t)}</td><td>${esc(a.m) || '<span class="muted">fehlt</span>'}</td><td class="wt">${"●".repeat(a.w)}</td></tr>`).join("")}
+  </tbody></table></div>` : `<p class="fb info">Noch keine Argumente formuliert. Geh zurück zu Schritt 3.</p>`}
+  <div><p class="lab" style="font-weight:700;margin-bottom:6px">Zwischen welchen Dimensionen besteht ein Zielkonflikt?</p>
+    <div class="row" style="flex-wrap:nowrap">${dimSel("ka", d.ka)}<span>↔</span>${dimSel("kb", d.kb)}</div>
+    <p class="note" style="margin-top:6px">Ein Konflikt kann auch innerhalb einer Dimension liegen (z. B. Klimaschutz ↔ Artenschutz) oder zwischen Handlungsebenen (lokal ↔ global).</p></div>
+  <div><label class="lab" for="kt">Zielkonflikt beschreiben und gewichten</label>
+    ${insChips(["Zwischen … und … besteht ein Zielkonflikt: …","Schwerer wiegt meines Erachtens …, weil …","Zwar …, aber …","Der Konflikt lässt sich abmildern, indem …"], "kt")}
+    <textarea id="kt" style="margin-top:8px;min-height:120px">${esc(d.kt)}</textarea></div>
+  <div class="help"><button class="btn ghost small" id="khelp">${h ? "Beispiel ausblenden" : "Hilfe: Beispiel ansehen"}</button></div>
+  ${h ? `<div class="hint">${esc(c.konflikt)}</div>` : ""}
+  ${nav(c, d)}`;
+  $("ka").onchange = e => { d.ka = e.target.value; save(); };
+  $("kb").onchange = e => { d.kb = e.target.value; save(); };
+  $("khelp").onclick = () => { hlp[c.id + "k"] = h ? 0 : 1; s4(c, d); };
+  bindField("kt", d, "kt"); bindIns(); bindNav(c, d);
+}
+
+/* Schritt 5 */
+function sentence(t){ t = t.trim(); if (!t) return ""; t = t[0].toUpperCase() + t.slice(1); return /[.!?]$/.test(t) ? t : t + "."; }
+function skeleton(c, d){
+  const verb = c.op === "bewerten" ? "bewerte" : "beurteile";
+  const out = [`Im Folgenden ${verb} ich, ob ${c.subj} ${c.adj} ist.`];
+  const dl = d.dims.map(k => DIMS[k].name).join(", ").replace(/, ([^,]*)$/, " und $1");
+  let m = d.dims.length ? `Als Maßstab lege ich ${d.dims.length > 1 ? "die Dimensionen" : "die Dimension"} ${dl} nachhaltiger Entwicklung zugrunde` : "Als Maßstab lege ich … zugrunde";
+  if (d.ebenen.length) m += ` und betrachte dabei die ${d.ebenen.map(e => e + "e").join(" und die ")} Ebene`;
+  if (d.zeit.some(z => z.startsWith("langfristig"))) m += ", auch mit Blick auf künftige Generationen";
+  out.push(m + ".");
+  if (d.mass.trim()) out.push(sentence(d.mass));
+  d.dims.forEach(k => (d.args[k] || []).filter(a => a.t.trim()).sort((a, b) => b.w - a.w).forEach((a, i) => {
+    const t = a.t.trim().replace(/[.]$/, "");
+    const lead = i === 0 ? `Aus ${DIMS[k].adj} Sicht spricht ${a.side === "pro" ? "dafür" : "dagegen"}:` : (a.side === "pro" ? "Dafür spricht außerdem:" : "Dagegen spricht jedoch:");
+    out.push(`${lead} ${t[0].toUpperCase() + t.slice(1)}${a.m && !t.includes(a.m) ? ` (${a.m})` : ""}.`);
+  }));
+  if (d.kt.trim()) out.push(sentence(d.kt));
+  else if (d.ka && d.kb) out.push(`Zwischen ${DIMS[d.ka].name} und ${DIMS[d.kb].name} besteht ein Zielkonflikt: … Schwerer wiegt meines Erachtens …, weil …`);
+  out.push(`Insgesamt komme ich zu dem Urteil, dass ${c.subj} ${POS[d.pos + 2]} ${c.adj} ist, weil …`);
+  out.push("Dieses Urteil gilt allerdings nur, sofern …");
+  return out.join(" ");
+}
+function s5(c, d){
+  $("stepbox").innerHTML = `<h2>5 · Urteilen</h2>
+  <div class="posline"><label class="lab" for="pos">Positionslinie: Wo stehst du?</label>
+    <input type="range" id="pos" min="-2" max="2" step="1" value="${d.pos}">
+    <div class="ends"><span>${esc(c.poles[0])}</span><span>${esc(c.poles[1])}</span></div>
+    <div class="now" id="posnow">${esc(c.subj[0].toUpperCase() + c.subj.slice(1))} ist ${POS[d.pos + 2]} ${esc(c.adj)}.</div></div>
+  <div><div class="spread" style="margin-bottom:6px"><label class="lab" for="txt" style="margin:0">Dein Urteil als Fließtext</label><span class="note" id="wc">${words(d.text)} Wörter</span></div>
+    <div class="row" style="margin-bottom:8px"><button class="btn ghost small" id="skel">Gerüst aus Schreibplan erzeugen</button><span id="skelq"></span></div>
+    <textarea id="txt" class="big" placeholder="Schreibe hier dein Urteil. Tipp: Erzeuge zuerst ein Gerüst aus deinem Schreibplan und überarbeite es dann.">${esc(d.text)}</textarea></div>
+  <details><summary style="cursor:pointer;font-weight:700">Satzbausteine einfügen</summary>
+    <div style="display:grid;gap:10px;margin-top:10px">${BAUSTEINE.filter(b => b[0] !== "Verbindungswörter").map(b => `<div><p class="mono muted" style="margin-bottom:4px">${b[0]}</p>${insChips(b[1], "txt")}</div>`).join("")}</div></details>
+  <div><p class="lab" style="font-weight:700;margin-bottom:6px">Checkliste: Prüfe deinen Text</p>
+    <div class="checks">${CHECK.map(k => `<label><input type="checkbox" data-c="${k[0]}" ${d.checks.includes(k[0]) ? "checked" : ""}><span>${k[1]}<small>${k[2]}</small></span></label>`).join("")}</div></div>
+  <div class="row"><button class="btn" id="copy">Text kopieren</button><button class="btn ghost" id="mus">${d.muster ? "Musterlösung ausblenden" : "Musterlösung zeigen"}</button></div>
+  ${d.muster ? `<div class="muster"><h3>Erwartungshorizont</h3><ul>${c.erw.map(e => `<li>${esc(e)}</li>`).join("")}</ul>
+    <h3>Mögliche Lösung</h3><p>${esc(c.muster)}</p>
+    <p class="note">Das ist eine von mehreren guten Lösungen. Ein anderes Urteil ist ebenso richtig, wenn es gut begründet und abgewogen ist.</p></div>` : ""}
+  <div class="navrow"><button class="btn ghost" id="prev">← Zurück</button><span id="resetbox"><button class="linkbtn" id="reset" style="color:var(--bad)">Fall zurücksetzen</button></span></div>`;
+  const pos = $("pos");
+  pos.oninput = () => { d.pos = +pos.value; save(); $("posnow").textContent = `${c.subj[0].toUpperCase() + c.subj.slice(1)} ist ${POS[d.pos + 2]} ${c.adj}.`; };
+  const txt = $("txt");
+  txt.oninput = () => { d.text = txt.value; save(); $("wc").textContent = words(d.text) + " Wörter"; };
+  $("skel").onclick = () => {
+    const put = () => { txt.value = skeleton(c, d); txt.dispatchEvent(new Event("input")); $("skelq").innerHTML = ""; };
+    if (!txt.value.trim()) return put();
+    $("skelq").innerHTML = `<span class="note">Vorhandenen Text ersetzen?</span> <button class="btn warn small" id="sk-y">Ersetzen</button> <button class="btn ghost small" id="sk-n">Abbrechen</button>`;
+    $("sk-y").onclick = put; $("sk-n").onclick = () => $("skelq").innerHTML = "";
+  };
+  document.querySelectorAll("[data-c]").forEach(b => b.onchange = () => { toggle(d.checks, b.dataset.c); save(); });
+  $("copy").onclick = e => copyText(`${c.frage}\n\n${txt.value}`, e.target);
+  $("mus").onclick = () => { d.muster = !d.muster; save(); s5(c, d); };
+  $("prev").onclick = () => go(c, 4);
+  $("reset").onclick = () => {
+    $("resetbox").innerHTML = `<span class="note">Alles in diesem Fall löschen?</span> <button class="btn warn small" id="r-y">Löschen</button> <button class="btn ghost small" id="r-n">Abbrechen</button>`;
+    $("r-y").onclick = () => { W.c[c.id] = blank(); save(); vFall(c); };
+    $("r-n").onclick = () => s5(c, d);
+  };
+  bindIns();
+}
+
+/* ---------- Reparieren ---------- */
+function vRep(){
+  $("view").innerHTML = `<div class="narrow"><section class="hero"><h1>Urteile reparieren</h1>
+    <p>Drei Schülerurteile mit typischen Schwächen. Finde heraus, was fehlt, und vergleiche dann mit einer verbesserten Fassung.</p></section>
+    ${REPAIR.map(r => {
+      const st = W.r[r.id] || { sel:[], done:false }, c = CASES.find(x => x.id === r.fall);
+      return `<section class="panel" id="rp-${r.id}"><div class="spread"><h2 style="font-size:22px">${esc(r.titel)}</h2><a class="linkbtn" href="#fall-${c.id}">Material ansehen</a></div>
+      <p class="muted" style="font-size:15px">Aufgabe: ${esc(c.frage)}</p>
+      <p class="weak">${esc(r.text)}</p>
+      <p style="font-weight:700">Welche Schwächen hat dieses Urteil? Markiere alle.</p>
+      <div class="checks">${CHECK.map(k => {
+        const on = st.sel.includes(k[0]), bad = r.flaws.includes(k[0]);
+        let res = "";
+        if (st.done) res = bad ? (on ? `<span class="res-ok">✓ erkannt</span>` : `<span class="res-no">übersehen</span>`) : (on ? `<span class="res-no">ist erfüllt</span>` : "");
+        return `<label><input type="checkbox" data-r="${r.id}" data-c="${k[0]}" ${on ? "checked" : ""} ${st.done ? "disabled" : ""}><span>Fehlt: ${k[1]} ${res}<small>${k[2]}</small></span></label>`;
+      }).join("")}</div>
+      ${st.done ? `<p style="font-weight:700">Verbesserte Fassung</p><p class="good">${esc(r.besser)}</p>
+        <div><button class="btn ghost small" data-again="${r.id}">Noch einmal</button></div>`
+        : `<div><button class="btn" data-chk="${r.id}">Prüfen</button></div>`}</section>`;
+    }).join("")}</div>`;
+  document.querySelectorAll("[data-r]").forEach(b => b.onchange = () => { const st = W.r[b.dataset.r] || (W.r[b.dataset.r] = { sel:[], done:false }); toggle(st.sel, b.dataset.c); save(); });
+  document.querySelectorAll("[data-chk]").forEach(b => b.onclick = () => { const st = W.r[b.dataset.chk] || (W.r[b.dataset.chk] = { sel:[], done:false }); st.done = true; save(); const y = window.scrollY; vRep(); window.scrollTo(0, y); });
+  document.querySelectorAll("[data-again]").forEach(b => b.onclick = () => { W.r[b.dataset.again] = { sel:[], done:false }; save(); const y = window.scrollY; vRep(); window.scrollTo(0, y); });
+}
+
+/* ---------- Schema ---------- */
+function vSchema(){
+  $("view").innerHTML = `<div class="narrow"><section class="hero"><h1>Das Urteilsschema</h1>
+    <p>So baust du ein Urteil im Anforderungsbereich III auf.</p></section>
+  <section class="panel"><h2 style="font-size:22px">Operatoren</h2><div class="tw"><table class="optable"><thead><tr><th>Operator</th><th>Was du tust</th><th>Ergebnis</th></tr></thead><tbody>
+    <tr><td><b>beurteilen</b></td><td>Sachverhalt mit Fachwissen anhand genannter Kriterien prüfen</td><td>Sachurteil: wirksam, geeignet, zutreffend</td></tr>
+    <tr><td><b>bewerten</b></td><td>wie beurteilen, zusätzlich eigene Wertmaßstäbe offenlegen und begründen</td><td>Werturteil: wünschenswert, vertretbar, abzulehnen</td></tr>
+    <tr><td><b>erörtern</b></td><td>Pro- und Contra-Argumente zu einer These oder Frage gegeneinander abwägen</td><td>begründetes Urteil am Ende</td></tr>
+    <tr><td><b>Stellung nehmen</b></td><td>eigene Position zu einer Aussage oder Maßnahme begründet darlegen</td><td>begründete Position</td></tr>
+  </tbody></table></div><p class="note">Maßgeblich sind die Formulierungen der Operatorenliste deines Bundeslandes.</p></section>
+  <section class="panel"><h2 style="font-size:22px">Die fünf Schritte</h2>
+    <ol style="margin:0;padding-left:22px;display:grid;gap:8px">
+      <li><b>Frage klären:</b> Welcher Operator? Worüber urteile ich genau, für wen und für welchen Raum?</li>
+      <li><b>Maßstäbe offenlegen:</b> Nach welchen Dimensionen, Ebenen und Zeithorizonten urteile ich? Welcher Maßstab ist mir am wichtigsten und warum?</li>
+      <li><b>Argumentieren:</b> Pro und Contra je Dimension, jedes Argument mit Beleg aus dem Material.</li>
+      <li><b>Abwägen:</b> Zielkonflikt benennen und begründen, was schwerer wiegt.</li>
+      <li><b>Urteilen:</b> Klare Position, Einschränkung („sofern …“), ggf. Handlungsempfehlung.</li>
+    </ol></section>
+  <section class="panel"><h2 style="font-size:22px">Wertmaßstäbe</h2>
+    <p><b>Dimensionen nachhaltiger Entwicklung</b></p>
+    <div class="dims">
+      <div class="dimbox"><b><span class="dot" style="background:var(--d-u)"></span>Umwelt</b><span>Klima- und Ressourcenschutz, Artenvielfalt, Böden und Wasser, erneuerbare Energien</span></div>
+      <div class="dimbox"><b><span class="dot" style="background:var(--d-w)"></span>Wirtschaft</b><span>Wertschöpfung, Arbeitsplätze, Kosten, Wettbewerbsfähigkeit, Abhängigkeiten</span></div>
+      <div class="dimbox"><b><span class="dot" style="background:var(--d-g)"></span>Gesellschaft</b><span>soziale Gerechtigkeit, Teilhabe, Gesundheit, Lebensqualität, Bedürfnisse</span></div>
+      <div class="dimbox"><b><span class="dot" style="background:var(--d-p)"></span>Politik</b><span>Legitimation, Mitbestimmung, Durchsetzbarkeit, Interessenausgleich, Frieden</span></div>
+    </div>
+    <p><b>Handlungsebenen</b></p>
+    <div class="ladder"><span>Individuum</span>→<span>Gemeinde</span>→<span>Region</span>→<span>Staat</span>→<span>Bündnisse (z. B. EU)</span>→<span>Welt</span></div>
+    <p class="note">Achte darauf, ob Nutzen und Kosten auf verschiedenen Ebenen anfallen, z. B. Nutzen global, Kosten lokal.</p>
+    <p><b>Zeit:</b> kurzfristige Folgen und langfristige Folgen für künftige Generationen (Generationengerechtigkeit).</p>
+    <p><b>Perspektiven:</b> Welche Akteure sind betroffen, und wer entscheidet?</p></section>
+  <section class="panel"><h2 style="font-size:22px">Typische Zielkonflikte</h2>
+    <div class="tw"><table class="optable"><tbody>
+      <tr><td><b>Wirtschaft ↔ Umwelt</b></td><td>Gewinn und Wachstum gegen Ressourcenschonung</td></tr>
+      <tr><td><b>Wirtschaft ↔ Gesellschaft</b></td><td>Gewinnmaximierung gegen soziale Gerechtigkeit</td></tr>
+      <tr><td><b>Gesellschaft ↔ Umwelt</b></td><td>Befriedigung von Bedürfnissen gegen Naturschutz</td></tr>
+      <tr><td><b>Politik</b></td><td>Ausgleich von Einzelinteressen und Allgemeinwohl</td></tr>
+      <tr><td><b>lokal ↔ global</b></td><td>Nutzen an einem Ort, Lasten an einem anderen</td></tr>
+    </tbody></table></div></section></div>`;
+}
+
+/* ---------- Formulieren ---------- */
+function vForm(){
+  $("view").innerHTML = `<div class="narrow"><section class="hero"><h1>Formulierungshilfen</h1>
+    <p>Tippe einen Baustein an, um ihn zu kopieren.</p></section>
+    ${BAUSTEINE.map(b => `<section class="panel bgroup"><h3>${esc(b[0])}</h3><div class="row">${b[1].map(t => `<button class="ins" data-copy="${esc(t)}">${esc(t)}</button>`).join("")}</div></section>`).join("")}</div>`;
+  document.querySelectorAll("[data-copy]").forEach(b => b.onclick = () => copyText(b.dataset.copy, b));
+}
+
+route();
+</script>
+
+</body></html>
